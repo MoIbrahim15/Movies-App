@@ -21,11 +21,13 @@ import java.util.ArrayList;
 public class MoviesManager extends AsyncTask<Void, Void, ArrayList<Movie>> implements ConnectionListener {
 
     private ArrayList<Movie> moviesArrayList = new ArrayList<>();
-    AsyncListener delegate = null;
-    String jsonResponse = null;
+    private AsyncListener delegate = null;
+    private String jsonResponse = null;
+    private String sortBy;
 
-    public MoviesManager(AsyncListener delegate) {
+    public MoviesManager(AsyncListener delegate, String sortBy) {
         this.delegate = delegate;
+        this.sortBy=sortBy;
     }
 
     @Override
@@ -39,7 +41,7 @@ public class MoviesManager extends AsyncTask<Void, Void, ArrayList<Movie>> imple
         final String BASE_URL = "http://api.themoviedb.org/3/movie";
         final String API_KEY_PARAM = "api_key";
 
-        String sortBy = "popular";
+//        String sortBy = "popular";
         Uri buildUri = Uri.parse(BASE_URL).buildUpon()
                 .appendPath(sortBy)
                 .appendQueryParameter(API_KEY_PARAM, BuildConfig.MOVIES_API_KEY)
