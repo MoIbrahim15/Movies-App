@@ -1,13 +1,14 @@
 package com.mohamedibrahim.popularmovies.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
+import com.mohamedibrahim.popularmovies.DetailedMovieActivity;
 import com.mohamedibrahim.popularmovies.R;
 import com.mohamedibrahim.popularmovies.models.Movie;
 import com.squareup.picasso.Picasso;
@@ -31,15 +32,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     @Override
     public MoviesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View mView = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_recyclerview_item, parent,false);
+        View mView = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_recyclerview_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(mView);
         return viewHolder;
     }
 
 
-
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final String BASE_POSTER_PATH = "http://image.tmdb.org/t/p/";
         final String SIZE = "w185";
         String POSTER_PATH = movies.get(position).getPosterPath();
@@ -49,8 +49,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         holder.posterMovie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context,"movie", Toast.LENGTH_LONG).show();
+                final String MoveExtra = "MovieExtra";
+                Intent detailedIntent = new Intent(context, DetailedMovieActivity.class);
+                detailedIntent.putExtra(MoveExtra, movies.get(position));
+                context.startActivity(detailedIntent);
             }
+
         });
     }
 

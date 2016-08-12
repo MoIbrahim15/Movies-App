@@ -9,5 +9,6 @@
     <string name="pref_sort_popular" translatable="false">popular</string>
     <string name="pref_sort_top" translatable="false">top_rated</string>
     <string name="action_setting">Setting</string>
+    <string name="movie_detail_title">Movie Detail</string>
 
 </resources>

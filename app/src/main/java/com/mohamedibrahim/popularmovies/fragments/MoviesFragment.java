@@ -64,7 +64,6 @@ public class MoviesFragment extends Fragment implements AsyncListener {
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.movies_recyclerview);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new GridLayoutManager(getContext(), 2);
-
         mRecyclerView.setLayoutManager(mLayoutManager);
         return mView;
     }

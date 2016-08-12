@@ -64,7 +64,6 @@ public class MoviesManager extends AsyncTask<Void, Void, ArrayList<Movie>> imple
         final String ADULT = "adult";
         final String OVERVIEW = "overview";
         final String REALSE_DATE = "release_date";
-        final String GENERE_IDS = "genre_ids";
         final String ID = "id";
         final String ORIGINAL_TITLE = "original_title";
         final String ORIGINAL_LANGUAGE = "original_language";
@@ -80,11 +79,10 @@ public class MoviesManager extends AsyncTask<Void, Void, ArrayList<Movie>> imple
             JSONArray resultArray = json.getJSONArray(RESULTS);
 
             for (int i = 0; i < resultArray.length(); i++) {
-//                List<Integer> genreIds = new ArrayList<Integer>();
 
                 JSONObject movieObject = resultArray.getJSONObject(i);
 
-                Movie movie = new Movie();
+                Movie movie=new Movie();
                 movie.setAdult(movieObject.getBoolean(ADULT));
                 movie.setBackdropPath(movieObject.getString(BACKDROP_PATH));
                 movie.setOverview(movieObject.getString(OVERVIEW));

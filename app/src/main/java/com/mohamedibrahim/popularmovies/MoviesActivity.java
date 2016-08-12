@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.mohamedibrahim.popularmovies.fragments.MoviesFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MoviesActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

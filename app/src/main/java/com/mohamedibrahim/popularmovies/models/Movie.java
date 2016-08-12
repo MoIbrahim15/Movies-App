@@ -1,16 +1,16 @@
 
 package com.mohamedibrahim.popularmovies.models;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Movie {
+
+public class Movie implements Parcelable {
 
     private String posterPath;
     private Boolean adult;
     private String overview;
     private String releaseDate;
-    private List<Integer> genreIds = new ArrayList<Integer>();
     private Integer id;
     private String originalTitle;
     private String originalLanguage;
@@ -20,6 +20,36 @@ public class Movie {
     private Integer voteCount;
     private Boolean video;
     private Double voteAverage;
+
+
+    /**
+     * Standard basic constructor for non-parcel
+     * object creation
+     */
+    public Movie() {
+    }
+
+    /**
+     * Constructor to use when re-constructing object
+     * from a parcel
+     *
+     * @param in a parcel from which to read this object
+     */
+    public Movie(Parcel in) {
+        posterPath = in.readString();
+        adult = in.readByte() != 0;
+        overview = in.readString();
+        releaseDate = in.readString();
+        id = in.readInt();
+        originalTitle = in.readString();
+        originalTitle = in.readString();
+        title = in.readString();
+        backdropPath = in.readString();
+        popularity = in.readDouble();
+        voteCount = in.readInt();
+        video = in.readByte() != 0;
+        voteAverage = in.readDouble();
+    }
 
     /**
      * @return The posterPath
@@ -77,19 +107,6 @@ public class Movie {
         this.releaseDate = releaseDate;
     }
 
-    /**
-     * @return The genreIds
-     */
-    public List<Integer> getGenreIds() {
-        return genreIds;
-    }
-
-    /**
-     * @param genreIds The genre_ids
-     */
-    public void setGenreIds(List<Integer> genreIds) {
-        this.genreIds = genreIds;
-    }
 
     /**
      * @return The id
@@ -215,6 +232,46 @@ public class Movie {
      */
     public void setVoteAverage(Double voteAverage) {
         this.voteAverage = voteAverage;
+    }
+
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(posterPath);
+        parcel.writeByte((byte) (adult ? 1 : 0));
+        parcel.writeString(overview);
+        parcel.writeString(releaseDate);
+        parcel.writeInt(id);
+        parcel.writeString(originalTitle);
+        parcel.writeString(originalLanguage);
+        parcel.writeString(title);
+        parcel.writeString(backdropPath);
+        parcel.writeDouble(popularity);
+        parcel.writeInt(voteCount);
+        parcel.writeByte((byte) (video ? 1 : 0));
+        parcel.writeDouble(voteAverage);
+    }
+
+
+    /**
+     * This field is needed for Android to be able to
+     * create new objects, individually or as arrays.
+     */
+    public static final Parcelable.Creator CREATOR
+            = new Parcelable.Creator() {
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int i) {
+            return new Movie[i];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
 }
