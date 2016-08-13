@@ -3,7 +3,7 @@
     <string name="movie_detail_title">Movie Detail</string>
 
     <string name="pref_sort_label">Sort By</string>
-    <string name="pref_sort_popular_label">Popular</string>
+    <string name="pref_sort_popular_label">Most Popular</string>
     <string name="pref_sort_top_label">Top Rated</string>
 
     <string name="pref_sort_key" translatable="false">sortBy</string>

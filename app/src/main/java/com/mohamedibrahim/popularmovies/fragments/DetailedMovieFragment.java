@@ -49,7 +49,7 @@ public class DetailedMovieFragment extends Fragment {
 
         //fill data
         if (selectedMovie != null) {
-            titleView.setText(selectedMovie.getTitle());
+            titleView.setText(selectedMovie.getOriginalTitle());
             date_view.setText(selectedMovie.getReleaseDate());
             rateView.setText(selectedMovie.getVoteAverage().toString() + "/10");
             descView.setText(selectedMovie.getOverview());

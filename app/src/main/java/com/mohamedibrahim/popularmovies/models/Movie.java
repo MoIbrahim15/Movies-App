@@ -42,7 +42,7 @@ public class Movie implements Parcelable {
         releaseDate = in.readString();
         id = in.readInt();
         originalTitle = in.readString();
-        originalTitle = in.readString();
+        originalLanguage = in.readString();
         title = in.readString();
         backdropPath = in.readString();
         popularity = in.readDouble();

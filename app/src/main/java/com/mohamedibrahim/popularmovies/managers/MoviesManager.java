@@ -1,7 +1,9 @@
 package com.mohamedibrahim.popularmovies.managers;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.mohamedibrahim.popularmovies.BuildConfig;
 import com.mohamedibrahim.popularmovies.managers.interfaces.AsyncListener;
@@ -23,10 +25,12 @@ public class MoviesManager extends AsyncTask<Void, Void, ArrayList<Movie>> imple
     private AsyncListener delegate = null;
     private String jsonResponse = null;
     private String sortBy;
+    private Context mContext;
 
-    public MoviesManager(AsyncListener delegate, String sortBy) {
+    public MoviesManager(Context mContext, String sortBy, AsyncListener delegate) {
+        this.mContext = mContext;
+        this.sortBy = sortBy;
         this.delegate = delegate;
-        this.sortBy=sortBy;
     }
 
     @Override
@@ -79,7 +83,7 @@ public class MoviesManager extends AsyncTask<Void, Void, ArrayList<Movie>> imple
 
                 JSONObject movieObject = resultArray.getJSONObject(i);
 
-                Movie movie=new Movie();
+                Movie movie = new Movie();
                 movie.setAdult(movieObject.getBoolean(ADULT));
                 movie.setBackdropPath(movieObject.getString(BACKDROP_PATH));
                 movie.setOverview(movieObject.getString(OVERVIEW));
@@ -99,6 +103,7 @@ public class MoviesManager extends AsyncTask<Void, Void, ArrayList<Movie>> imple
 
         } catch (JSONException e) {
             e.printStackTrace();
+            Toast.makeText(mContext, "Error, while Retriving Data", Toast.LENGTH_LONG).show();
             return null;
         }
     }

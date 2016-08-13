@@ -41,8 +41,8 @@
 
                 <ImageView
                     android:id="@+id/poster_img_detailed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="125dp"
+                    android:layout_height="175dp"
                     android:layout_marginLeft="8dp"
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY" />
@@ -65,9 +65,10 @@
                         style="@style/labels_style" />
 
                     <ToggleButton
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:background="@drawable/ic_star_blank"
+                        android:layout_marginTop="20dp"
                         android:textOff=""
                         android:textOn="" />
                 </LinearLayout>

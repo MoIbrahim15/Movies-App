@@ -1,7 +1,10 @@
 package com.mohamedibrahim.popularmovies.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -13,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.mohamedibrahim.popularmovies.R;
 import com.mohamedibrahim.popularmovies.SettingsActivity;
@@ -28,8 +32,9 @@ public class MoviesFragment extends Fragment implements AsyncListener {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private  String sortedBy;
+    private String sortedBy;
     private SharedPreferences preferences;
+
     public MoviesFragment() {
         // Required empty public constructor
     }
@@ -48,7 +53,7 @@ public class MoviesFragment extends Fragment implements AsyncListener {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_setting:
                 Intent settingIntent = new Intent(getContext(), SettingsActivity.class);
                 startActivity(settingIntent);
@@ -72,15 +77,19 @@ public class MoviesFragment extends Fragment implements AsyncListener {
     @Override
     public void onStart() {
         super.onStart();
-        updateMovies();
+        if (isOnline()) {
+            updateMovies();
+        } else {
+            Toast.makeText(getContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
+        }
     }
 
 
-    private void updateMovies(){
+    private void updateMovies() {
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         sortedBy = preferences.getString(getString(R.string.pref_sort_key),
                 getString(R.string.pref_sort_popular));
-        MoviesManager moviesManager = new MoviesManager(this,sortedBy);
+        MoviesManager moviesManager = new MoviesManager(getContext(), sortedBy,this);
         moviesManager.execute();
     }
 
@@ -88,5 +97,12 @@ public class MoviesFragment extends Fragment implements AsyncListener {
     public void FinishAsync(ArrayList<Movie> movies) {
         mAdapter = new MoviesAdapter(getContext(), movies);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }
