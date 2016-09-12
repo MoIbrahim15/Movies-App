@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:background="@color/colorGreen"
         android:elevation="2dp">
 
@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="16dp"
             android:textColor="@android:color/white"
             android:textSize="36sp" />
     </RelativeLayout>
@@ -67,8 +67,8 @@
                     <ToggleButton
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:background="@drawable/ic_star_blank"
                         android:layout_marginTop="20dp"
+                        android:background="@drawable/ic_star_blank"
                         android:textOff=""
                         android:textOn="" />
                 </LinearLayout>

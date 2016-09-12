@@ -22,18 +22,23 @@ import com.mohamedibrahim.popularmovies.R;
 import com.mohamedibrahim.popularmovies.SettingsActivity;
 import com.mohamedibrahim.popularmovies.adapters.MoviesAdapter;
 import com.mohamedibrahim.popularmovies.managers.MoviesManager;
-import com.mohamedibrahim.popularmovies.managers.interfaces.AsyncListener;
+import com.mohamedibrahim.popularmovies.managers.interfaces.ClickListener;
+import com.mohamedibrahim.popularmovies.managers.interfaces.MoviesListener;
 import com.mohamedibrahim.popularmovies.models.Movie;
 
 import java.util.ArrayList;
 
-public class MoviesFragment extends Fragment implements AsyncListener {
+public class MoviesFragment extends Fragment implements MoviesListener {
+
+    private int mPosition = RecyclerView.NO_POSITION;
+    private static final String SELECTED_KEY = "selected_position";
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private String sortedBy;
     private SharedPreferences preferences;
+    private boolean isTwoPane;
+    private String sortedBy;
 
     public MoviesFragment() {
         // Required empty public constructor
@@ -66,13 +71,25 @@ public class MoviesFragment extends Fragment implements AsyncListener {
                              Bundle savedInstanceState) {
         View mView = inflater.inflate(R.layout.fragment_movies, container, false);
 
+        mLayoutManager = new GridLayoutManager(getContext(), getResources().getInteger(R.integer.movies_columns));
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.movies_recyclerview);
         mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new GridLayoutManager(getContext(), 2);
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
+            mPosition = savedInstanceState.getInt(SELECTED_KEY);
+        }
+
         return mView;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (mPosition != RecyclerView.NO_POSITION) {
+            outState.putInt(SELECTED_KEY, mPosition);
+        }
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public void onStart() {
@@ -89,14 +106,37 @@ public class MoviesFragment extends Fragment implements AsyncListener {
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         sortedBy = preferences.getString(getString(R.string.pref_sort_key),
                 getString(R.string.pref_sort_popular));
-        MoviesManager moviesManager = new MoviesManager(getContext(), sortedBy,this);
+        MoviesManager moviesManager = new MoviesManager(getContext(), sortedBy, this);
         moviesManager.execute();
     }
 
     @Override
-    public void FinishAsync(ArrayList<Movie> movies) {
+    public void onFinishMovies(ArrayList<Movie> movies) {
+
         mAdapter = new MoviesAdapter(getContext(), movies);
         mRecyclerView.setAdapter(mAdapter);
+
+        if (mPosition != RecyclerView.NO_POSITION) {
+            mRecyclerView.scrollToPosition(mPosition);
+        } else {
+            //first start && two pane
+            if (getIsTwoPane()) {
+                ((ClickListener) getActivity())
+                        .onItemSelected(movies.get(0), 0);
+            }
+        }
+    }
+
+    public void setItemPosition(int position) {
+        this.mPosition = position;
+    }
+
+    public void setIsTwoPane(boolean isTwoPane) {
+        this.isTwoPane = isTwoPane;
+    }
+
+    public boolean getIsTwoPane() {
+        return isTwoPane;
     }
 
     public boolean isOnline() {

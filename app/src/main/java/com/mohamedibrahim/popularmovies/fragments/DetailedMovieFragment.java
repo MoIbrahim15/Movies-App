@@ -2,7 +2,6 @@ package com.mohamedibrahim.popularmovies.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +14,11 @@ import com.squareup.picasso.Picasso;
 
 
 public class DetailedMovieFragment extends Fragment {
-    private Movie selectedMovie;
-
+    final static String MOVIE_DATA = "MOVIE_DATA";
     final static String BASE_POSTER_PATH = "http://image.tmdb.org/t/p/";
     final static String SIZE = "w185";
-
+    final static String FROMTEN = "/10";
+    private Movie selectedMovie;
 
     public DetailedMovieFragment() {
     }
@@ -28,17 +27,18 @@ public class DetailedMovieFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
-            final String MoveExtra = "MovieExtra";
-            Bundle data = getActivity().getIntent().getExtras();
-            selectedMovie = data.getParcelable(MoveExtra);
-            Log.v("movieDesc", selectedMovie.getOverview());
+            Bundle arguments = getArguments();
+            if (arguments != null) {
+                selectedMovie = arguments.getParcelable(MOVIE_DATA);
+            }
         }
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         // Inflate the layout for this fragment
         View mView = inflater.inflate(R.layout.fragment_detailed_movie, container, false);
         TextView titleView = (TextView) mView.findViewById(R.id.title_label);
@@ -47,16 +47,17 @@ public class DetailedMovieFragment extends Fragment {
         TextView descView = (TextView) mView.findViewById(R.id.desc_label);
         ImageView posterView = (ImageView) mView.findViewById(R.id.poster_img_detailed);
 
-        //fill data
+        //filling data
         if (selectedMovie != null) {
-            titleView.setText(selectedMovie.getOriginalTitle());
-            date_view.setText(selectedMovie.getReleaseDate());
-            rateView.setText(selectedMovie.getVoteAverage().toString() + "/10");
-            descView.setText(selectedMovie.getOverview());
 
             String POSTER_PATH = selectedMovie.getPosterPath();
             String FullPosterPath = BASE_POSTER_PATH + SIZE + POSTER_PATH;
+
             Picasso.with(getContext()).load(FullPosterPath).into(posterView);
+            titleView.setText(selectedMovie.getOriginalTitle());
+            date_view.setText(selectedMovie.getReleaseDate());
+            rateView.setText(selectedMovie.getVoteAverage().toString() + FROMTEN);
+            descView.setText(selectedMovie.getOverview());
         }
         return mView;
     }

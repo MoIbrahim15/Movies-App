@@ -1,15 +1,14 @@
 package com.mohamedibrahim.popularmovies.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.mohamedibrahim.popularmovies.DetailedMovieActivity;
 import com.mohamedibrahim.popularmovies.R;
+import com.mohamedibrahim.popularmovies.managers.interfaces.ClickListener;
 import com.mohamedibrahim.popularmovies.models.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -31,7 +30,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
     @Override
     public MoviesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View mView = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_recyclerview_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(mView);
         return viewHolder;
@@ -49,10 +47,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         holder.posterMovie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String MoveExtra = "MovieExtra";
-                Intent detailedIntent = new Intent(context, DetailedMovieActivity.class);
-                detailedIntent.putExtra(MoveExtra, movies.get(position));
-                context.startActivity(detailedIntent);
+                ((ClickListener) context)
+                        .onItemSelected(movies.get(position),position);
             }
 
         });

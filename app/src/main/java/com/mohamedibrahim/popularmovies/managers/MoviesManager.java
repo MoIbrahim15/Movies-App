@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.mohamedibrahim.popularmovies.BuildConfig;
-import com.mohamedibrahim.popularmovies.managers.interfaces.AsyncListener;
+import com.mohamedibrahim.popularmovies.managers.interfaces.MoviesListener;
 import com.mohamedibrahim.popularmovies.managers.interfaces.ConnectionListener;
 import com.mohamedibrahim.popularmovies.models.Movie;
 
@@ -18,16 +18,16 @@ import java.util.ArrayList;
 
 /**
  * Created by Mohamed Ibrahim on 7/29/2016.
- */
+ **/
 public class MoviesManager extends AsyncTask<Void, Void, ArrayList<Movie>> implements ConnectionListener {
 
-    private ArrayList<Movie> moviesArrayList = new ArrayList<>();
-    private AsyncListener delegate = null;
+    private MoviesListener delegate = null;
+    private Context mContext;
     private String jsonResponse = null;
     private String sortBy;
-    private Context mContext;
+    private ArrayList<Movie> moviesArrayList = new ArrayList<>();
 
-    public MoviesManager(Context mContext, String sortBy, AsyncListener delegate) {
+    public MoviesManager(Context mContext, String sortBy, MoviesListener delegate) {
         this.mContext = mContext;
         this.sortBy = sortBy;
         this.delegate = delegate;
@@ -55,7 +55,7 @@ public class MoviesManager extends AsyncTask<Void, Void, ArrayList<Movie>> imple
     @Override
     protected void onPostExecute(ArrayList<Movie> movies) {
         super.onPostExecute(movies);
-        delegate.FinishAsync(movies);
+        delegate.onFinishMovies(movies);
     }
 
     private ArrayList<Movie> getMoviesDataFromJson(String jsonResponse) {

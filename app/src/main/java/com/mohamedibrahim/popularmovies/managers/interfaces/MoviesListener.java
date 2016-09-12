@@ -7,6 +7,6 @@ import java.util.ArrayList;
 /**
  * Created by Mohamed Ibrahim on 7/29/2016.
  */
-public interface AsyncListener {
-    void FinishAsync(ArrayList<Movie> movies);
+public interface MoviesListener {
+    void onFinishMovies(ArrayList<Movie> movies);
 }
