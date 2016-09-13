@@ -112,18 +112,22 @@ public class MoviesFragment extends Fragment implements MoviesListener {
 
     @Override
     public void onFinishMovies(ArrayList<Movie> movies) {
+        if (movies != null) {
+            mAdapter = new MoviesAdapter(getContext(), movies);
+            mRecyclerView.setAdapter(mAdapter);
 
-        mAdapter = new MoviesAdapter(getContext(), movies);
-        mRecyclerView.setAdapter(mAdapter);
-
-        if (mPosition != RecyclerView.NO_POSITION) {
-            mRecyclerView.scrollToPosition(mPosition);
-        } else {
-            //first start && two pane
-            if (getIsTwoPane()) {
-                ((ClickListener) getActivity())
-                        .onItemSelected(movies.get(0), 0);
+            if (mPosition != RecyclerView.NO_POSITION) {
+                mRecyclerView.scrollToPosition(mPosition);
+            } else {
+                //first start && two pane
+                if (getIsTwoPane()) {
+                    ((ClickListener) getActivity())
+                            .onItemSelected(movies.get(0), 0);
+                }
             }
+        } else {
+            mRecyclerView.setAdapter(null);
+            Toast.makeText(getContext(), R.string.no_movies, Toast.LENGTH_LONG).show();
         }
     }
 

@@ -3,7 +3,6 @@ package com.mohamedibrahim.popularmovies.managers;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import com.mohamedibrahim.popularmovies.BuildConfig;
 import com.mohamedibrahim.popularmovies.managers.interfaces.ConnectionListener;
@@ -57,7 +56,7 @@ public class TrailersManager extends AsyncTask<Void, Void, ArrayList<Trailer>> i
     @Override
     protected void onPostExecute(ArrayList<Trailer> trailers) {
         super.onPostExecute(trailers);
-        delegate.onFinishTrailers(trailers);
+        if (trailers != null) delegate.onFinishTrailers(trailers);
     }
 
     private ArrayList<Trailer> getTrailersDataFromJson(String jsonResponse) {
@@ -92,9 +91,8 @@ public class TrailersManager extends AsyncTask<Void, Void, ArrayList<Trailer>> i
             }
             return trailersArrayList;
 
-        } catch (JSONException e) {
+        } catch (JSONException | NullPointerException e) {
             e.printStackTrace();
-            Toast.makeText(mContext, "Error, while Retriving Data", Toast.LENGTH_LONG).show();
             return null;
         }
     }

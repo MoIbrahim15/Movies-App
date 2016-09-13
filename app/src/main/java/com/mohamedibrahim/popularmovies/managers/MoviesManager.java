@@ -3,11 +3,10 @@ package com.mohamedibrahim.popularmovies.managers;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import com.mohamedibrahim.popularmovies.BuildConfig;
-import com.mohamedibrahim.popularmovies.managers.interfaces.MoviesListener;
 import com.mohamedibrahim.popularmovies.managers.interfaces.ConnectionListener;
+import com.mohamedibrahim.popularmovies.managers.interfaces.MoviesListener;
 import com.mohamedibrahim.popularmovies.models.Movie;
 
 import org.json.JSONArray;
@@ -100,10 +99,8 @@ public class MoviesManager extends AsyncTask<Void, Void, ArrayList<Movie>> imple
                 moviesArrayList.add(movie);
             }
             return moviesArrayList;
-
-        } catch (JSONException e) {
+        } catch (JSONException | NullPointerException e) {
             e.printStackTrace();
-            Toast.makeText(mContext, "Error, while Retriving Data", Toast.LENGTH_LONG).show();
             return null;
         }
     }

@@ -21,7 +21,7 @@ public class ConnectionManager {
 
     public ConnectionManager(Uri buildUri, ConnectionListener listener) {
         jsonResponse = Connector(buildUri);
-        listener.FinishConnection(jsonResponse);
+        if(jsonResponse!=null) listener.FinishConnection(jsonResponse);
     }
 
     public String Connector(Uri buildUri) {

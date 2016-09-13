@@ -1,7 +1,9 @@
 package com.mohamedibrahim.popularmovies;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -25,13 +27,13 @@ public class MainActivity extends AppCompatActivity implements ClickListener, Tr
     private ArrayList<Review> reviewsArrayList = new ArrayList<>();
     private boolean mTwoPane;
     private MoviesFragment moviesFragment;
-
+    private SharedPreferences preferences;
+    private String sortedBy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        getSupportActionBar().setTitle(R.string.pref_sort_key);
         if (findViewById(R.id.movies_detail_container) != null) {
             mTwoPane = true;
             if (savedInstanceState == null) {
@@ -46,6 +48,22 @@ public class MainActivity extends AppCompatActivity implements ClickListener, Tr
         moviesFragment = ((MoviesFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_movies));
         moviesFragment.setIsTwoPane(mTwoPane);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sortedBy = preferences.getString(getString(R.string.pref_sort_key),
+                getString(R.string.pref_sort_popular));
+
+        if (sortedBy.equals(getString(R.string.pref_sort_popular))) {
+            getSupportActionBar().setTitle(R.string.pref_sort_popular_label);
+        } else if (sortedBy.equals(getString(R.string.pref_sort_top))) {
+            getSupportActionBar().setTitle(R.string.pref_sort_top_label);
+        } else if (sortedBy.equals(getString(R.string.pref_sort_favorite))) {
+            getSupportActionBar().setTitle(R.string.pref_sort_favorite_label);
+        }
     }
 
     @Override
