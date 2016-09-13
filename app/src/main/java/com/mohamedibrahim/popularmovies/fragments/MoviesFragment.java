@@ -2,11 +2,9 @@ package com.mohamedibrahim.popularmovies.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +18,7 @@ import android.widget.Toast;
 
 import com.mohamedibrahim.popularmovies.R;
 import com.mohamedibrahim.popularmovies.SettingsActivity;
+import com.mohamedibrahim.popularmovies.Utility;
 import com.mohamedibrahim.popularmovies.adapters.MoviesAdapter;
 import com.mohamedibrahim.popularmovies.managers.MoviesManager;
 import com.mohamedibrahim.popularmovies.managers.interfaces.ClickListener;
@@ -32,13 +31,10 @@ public class MoviesFragment extends Fragment implements MoviesListener {
 
     private int mPosition = RecyclerView.NO_POSITION;
     private static final String SELECTED_KEY = "selected_position";
-
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private SharedPreferences preferences;
     private boolean isTwoPane;
-    private String sortedBy;
 
     public MoviesFragment() {
         // Required empty public constructor
@@ -103,9 +99,7 @@ public class MoviesFragment extends Fragment implements MoviesListener {
 
 
     private void updateMovies() {
-        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        sortedBy = preferences.getString(getString(R.string.pref_sort_key),
-                getString(R.string.pref_sort_popular));
+        String sortedBy = Utility.getPreferredMovies(getContext());
         MoviesManager moviesManager = new MoviesManager(getContext(), sortedBy, this);
         moviesManager.execute();
     }
