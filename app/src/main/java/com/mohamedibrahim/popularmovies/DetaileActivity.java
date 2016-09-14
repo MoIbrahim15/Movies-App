@@ -18,7 +18,8 @@ public class DetaileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         if (savedInstanceState == null) {
             Bundle arguments = new Bundle();
-            arguments.putParcelable(MOVIE_DATA, getIntent().getExtras().getParcelable(MOVIE_DATA));
+            arguments.putParcelable(MOVIE_DATA,
+                    getIntent().getExtras().getParcelable(MOVIE_DATA));
             DetailedMovieFragment fragment = new DetailedMovieFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

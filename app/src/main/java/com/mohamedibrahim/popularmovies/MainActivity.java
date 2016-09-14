@@ -3,28 +3,24 @@ package com.mohamedibrahim.popularmovies;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.mohamedibrahim.popularmovies.fragments.DetailedMovieFragment;
 import com.mohamedibrahim.popularmovies.fragments.MoviesFragment;
-import com.mohamedibrahim.popularmovies.managers.ReviewsManager;
-import com.mohamedibrahim.popularmovies.managers.TrailersManager;
 import com.mohamedibrahim.popularmovies.managers.interfaces.ClickListener;
-import com.mohamedibrahim.popularmovies.managers.interfaces.TrailerReviewsListener;
 import com.mohamedibrahim.popularmovies.models.Movie;
 import com.mohamedibrahim.popularmovies.models.Review;
 import com.mohamedibrahim.popularmovies.models.Trailer;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements ClickListener, TrailerReviewsListener {
+public class MainActivity extends AppCompatActivity implements ClickListener{
 
-    static final String MOVIE_DATA = "MOVIE_DATA";
-    private static final String DETAILFRAGMENT_TAG = "DFTAG";
     private ArrayList<Trailer> trailersArrayList = new ArrayList<>();
     private ArrayList<Review> reviewsArrayList = new ArrayList<>();
     private boolean mTwoPane;
     private MoviesFragment moviesFragment;
+    private static final String DETAILFRAGMENT_TAG = "DFTAG";
+    static final String MOVIE_DATA = "MOVIE_DATA";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +57,6 @@ public class MainActivity extends AppCompatActivity implements ClickListener, Tr
 
     @Override
     public void onItemSelected(Movie movie, int position) {
-        TrailersManager trailersManager = new TrailersManager(this, movie.getId().toString(), this);
-        trailersManager.execute();
-
-        ReviewsManager reviewsManager = new ReviewsManager(this, movie.getId().toString(), this);
-        reviewsManager.execute();
-
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
@@ -85,21 +75,5 @@ public class MainActivity extends AppCompatActivity implements ClickListener, Tr
             startActivity(detailedIntent);
         }
         moviesFragment.setItemPosition(position);
-    }
-
-    @Override
-    public void onFinishTrailers(ArrayList<Trailer> trailersArrayList) {
-        this.trailersArrayList = trailersArrayList;
-        for (int i = 0; i < trailersArrayList.size(); i++) {
-            Log.v("keeey", trailersArrayList.get(i).getKey());
-        }
-    }
-
-    @Override
-    public void onFinishReviews(ArrayList<Review> reviewsArrayList) {
-        this.reviewsArrayList = reviewsArrayList;
-        for (int i = 0; i < reviewsArrayList.size(); i++) {
-            Log.v("author", reviewsArrayList.get(i).getAuthor());
-        }
     }
 }
