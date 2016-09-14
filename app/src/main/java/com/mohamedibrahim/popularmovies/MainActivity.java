@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.mohamedibrahim.popularmovies.fragments.DetailedMovieFragment;
+import com.mohamedibrahim.popularmovies.fragments.DetailsMovieFragment;
 import com.mohamedibrahim.popularmovies.fragments.MoviesFragment;
 import com.mohamedibrahim.popularmovies.managers.interfaces.ClickListener;
 import com.mohamedibrahim.popularmovies.models.Movie;
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements ClickListener{
             mTwoPane = true;
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.movies_detail_container, new DetailedMovieFragment(), DETAILFRAGMENT_TAG)
+                        .replace(R.id.movies_detail_container, new DetailsMovieFragment(), DETAILFRAGMENT_TAG)
                         .commit();
             }
         } else {
@@ -63,14 +63,14 @@ public class MainActivity extends AppCompatActivity implements ClickListener{
             // fragment transaction.
             Bundle args = new Bundle();
             args.putParcelable(MOVIE_DATA, movie);
-            DetailedMovieFragment fragment = new DetailedMovieFragment();
+            DetailsMovieFragment fragment = new DetailsMovieFragment();
             fragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.movies_detail_container, fragment, DETAILFRAGMENT_TAG)
                     .commit();
         } else {
-            Intent detailedIntent = new Intent(this, DetaileActivity.class);
+            Intent detailedIntent = new Intent(this, DetailsActivity.class);
             detailedIntent.putExtra(MOVIE_DATA, movie);
             startActivity(detailedIntent);
         }
