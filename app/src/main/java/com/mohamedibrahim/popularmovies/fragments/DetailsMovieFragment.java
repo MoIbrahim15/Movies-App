@@ -2,7 +2,6 @@ package com.mohamedibrahim.popularmovies.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +35,8 @@ public class DetailsMovieFragment extends Fragment implements TrailerReviewsList
 
     private ListView mListView;
     DetailsAdapter detailsAdapter;
+    private static final String SELECTED_MOVIE = "SELECTED_MOVIE";
+    private static final String TRAILERS_REVIEWS = "TRAILERS_REVIEWS";
 
     public DetailsMovieFragment() {
     }
@@ -52,6 +53,27 @@ public class DetailsMovieFragment extends Fragment implements TrailerReviewsList
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(
+                R.layout.fragment_details_movie, container, false);
+
+        View headerView = inflater.inflate(
+                R.layout.details_header, null);
+
+        mListView = (ListView) rootView.findViewById(R.id.detailes_fragment_listview);
+        mListView.addHeaderView(headerView);
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_MOVIE)) {
+            selectedMovie = savedInstanceState.getParcelable(SELECTED_MOVIE);
+        }
+
+        fillingDetailsHeaderData(headerView);
+
+        return rootView;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (selectedMovie != null && detailsAdapter == null) {
@@ -64,20 +86,11 @@ public class DetailsMovieFragment extends Fragment implements TrailerReviewsList
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(
-                R.layout.fragment_details_movie, container, false);
-
-        View headerView = inflater.inflate(
-                R.layout.details_header, null);
-
-        mListView = (ListView) rootView.findViewById(R.id.detailes_fragment_listview);
-        mListView.addHeaderView(headerView);
-
-        fillingDetailsHeaderData(headerView);
-
-        return rootView;
+    public void onSaveInstanceState(Bundle outState) {
+        if (selectedMovie != null) {
+            outState.putParcelable(SELECTED_MOVIE, selectedMovie);
+        }
+        super.onSaveInstanceState(outState);
     }
 
     private void fillingDetailsHeaderData(View headerView) {
@@ -108,14 +121,14 @@ public class DetailsMovieFragment extends Fragment implements TrailerReviewsList
     @Override
     public void onFinishReviews(ArrayList<Review> reviewsArrayList) {
         movieDetailesList.addAll(reviewsArrayList);
-        for (int i = 0; i < movieDetailesList.size(); i++) {
-            if (movieDetailesList.get(i) instanceof Trailer) {
-                Log.v("Trailer", ((Trailer) movieDetailesList.get(i)).getKey());
-            }
-            if (movieDetailesList.get(i) instanceof Review) {
-                Log.v("Review", ((Review) movieDetailesList.get(i)).getContent());
-            }
-        }
+//        for (int i = 0; i < movieDetailesList.size(); i++) {
+//            if (movieDetailesList.get(i) instanceof Trailer) {
+//                Log.v("Trailer", ((Trailer) movieDetailesList.get(i)).getKey());
+//            }
+//            if (movieDetailesList.get(i) instanceof Review) {
+//                Log.v("Review", ((Review) movieDetailesList.get(i)).getContent());
+//            }
+//        }
 
         detailsAdapter = new DetailsAdapter(getContext(), movieDetailesList);
         mListView.setAdapter(detailsAdapter);

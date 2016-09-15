@@ -112,15 +112,13 @@ public class MoviesFragment extends Fragment implements MoviesListener {
 
             if (mPosition != RecyclerView.NO_POSITION) {
                 mRecyclerView.scrollToPosition(mPosition);
-                if (getIsTwoPane()) {
-                    ((ClickListener) getActivity())
-                            .onItemSelected(movies.get(mPosition), mPosition);
-                }
             } else {
                 //first start && two pane
                 if (getIsTwoPane()) {
+                    final int FIRST_ARRAYLIST_POSITION = 0;
                     ((ClickListener) getActivity())
-                            .onItemSelected(movies.get(0), 0);
+                            .onItemSelected(movies.get(FIRST_ARRAYLIST_POSITION),
+                                    FIRST_ARRAYLIST_POSITION);
                 }
             }
         } else {
