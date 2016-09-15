@@ -68,10 +68,10 @@
                         android:fontFamily="sans-serif-condensed" />
 
                     <ToggleButton
+                        android:id="@+id/favorite_btn"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:layout_marginTop="20dp"
-                        android:background="@drawable/ic_action_favorite_outline"
                         android:textOff=""
                         android:textOn="" />
                 </LinearLayout>

@@ -20,6 +20,7 @@ import com.mohamedibrahim.popularmovies.R;
 import com.mohamedibrahim.popularmovies.SettingsActivity;
 import com.mohamedibrahim.popularmovies.Utility;
 import com.mohamedibrahim.popularmovies.adapters.MoviesAdapter;
+import com.mohamedibrahim.popularmovies.data.MoviesDBHelper;
 import com.mohamedibrahim.popularmovies.managers.MoviesManager;
 import com.mohamedibrahim.popularmovies.managers.interfaces.ClickListener;
 import com.mohamedibrahim.popularmovies.managers.interfaces.MoviesListener;
@@ -33,6 +34,7 @@ public class MoviesFragment extends Fragment implements MoviesListener {
     private int mPosition = RecyclerView.NO_POSITION;
     private RecyclerView mRecyclerView;
     private boolean isTwoPane;
+    private MoviesListener delegate = this;
 
     public MoviesFragment() {
         // Required empty public constructor
@@ -98,8 +100,14 @@ public class MoviesFragment extends Fragment implements MoviesListener {
 
     private void updateMovies() {
         String sortedBy = Utility.getPreferredMovies(getContext());
-        MoviesManager moviesManager = new MoviesManager(getContext(), sortedBy, this);
-        moviesManager.execute();
+        if (sortedBy.equalsIgnoreCase(getString(R.string.pref_sort_favorite))) {
+            MoviesDBHelper moviesDBHelper = new MoviesDBHelper(getContext());
+            ArrayList<Movie> movies = moviesDBHelper.getAllMovies();
+            delegate.onFinishMovies(movies);
+        } else {
+            MoviesManager moviesManager = new MoviesManager(getContext(), sortedBy, this);
+            moviesManager.execute();
+        }
     }
 
     @Override

@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.mohamedibrahim.popularmovies.R;
 import com.mohamedibrahim.popularmovies.adapters.DetailsAdapter;
+import com.mohamedibrahim.popularmovies.data.MoviesDBHelper;
 import com.mohamedibrahim.popularmovies.managers.ReviewsManager;
 import com.mohamedibrahim.popularmovies.managers.TrailersManager;
 import com.mohamedibrahim.popularmovies.managers.interfaces.TrailerReviewsListener;
@@ -28,6 +30,9 @@ public class DetailsMovieFragment extends Fragment implements TrailerReviewsList
     private ArrayList<Object> movieDetailList = new ArrayList<>();
     private ListView mListView;
     private DetailsAdapter detailsAdapter;
+
+    private ToggleButton favoriteBtn;
+    private MoviesDBHelper moviesDBHelper;
 
     static final String MOVIE_DATA = "MOVIE_DATA";
     static final String SELECTED_MOVIE = "SELECTED_MOVIE";
@@ -50,6 +55,7 @@ public class DetailsMovieFragment extends Fragment implements TrailerReviewsList
                 selectedMovie = arguments.getParcelable(MOVIE_DATA);
             }
         }
+        moviesDBHelper = new MoviesDBHelper(getContext());
     }
 
     @Override
@@ -102,6 +108,7 @@ public class DetailsMovieFragment extends Fragment implements TrailerReviewsList
         TextView rateView = (TextView) headerView.findViewById(R.id.rate_label);
         TextView descView = (TextView) headerView.findViewById(R.id.desc_label);
         ImageView posterView = (ImageView) headerView.findViewById(R.id.poster_img_detailed);
+        favoriteBtn = (ToggleButton) headerView.findViewById(R.id.favorite_btn);
 
         if (selectedMovie != null) {
             String POSTER_PATH = selectedMovie.getPosterPath();
@@ -112,6 +119,26 @@ public class DetailsMovieFragment extends Fragment implements TrailerReviewsList
             date_view.setText(selectedMovie.getReleaseDate());
             rateView.setText(selectedMovie.getVoteAverage().toString() + FROM_TEN);
             descView.setText(selectedMovie.getOverview());
+
+
+            if (moviesDBHelper.ifMovieFavorite(selectedMovie.getId())) {
+                favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite);
+            } else {
+                favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite_outline);
+            }
+
+            favoriteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (moviesDBHelper.ifMovieFavorite(selectedMovie.getId())) {
+                        moviesDBHelper.deleteMovie(selectedMovie);
+                        favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite_outline);
+                    } else {
+                        moviesDBHelper.addMovie(selectedMovie);
+                        favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite);
+                    }
+                }
+            });
         }
     }
 
