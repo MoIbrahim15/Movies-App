@@ -9,6 +9,7 @@
         android:id="@+id/review_list_item_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -16,5 +17,5 @@
         android:id="@+id/review_list_item_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="left" />
+        android:fontFamily="sans-serif-condensed" />
 </LinearLayout>

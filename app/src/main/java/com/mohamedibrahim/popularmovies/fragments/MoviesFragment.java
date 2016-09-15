@@ -29,11 +29,9 @@ import java.util.ArrayList;
 
 public class MoviesFragment extends Fragment implements MoviesListener {
 
-    private int mPosition = RecyclerView.NO_POSITION;
     private static final String SELECTED_KEY = "selected_position";
+    private int mPosition = RecyclerView.NO_POSITION;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private boolean isTwoPane;
 
     public MoviesFragment() {
@@ -66,8 +64,8 @@ public class MoviesFragment extends Fragment implements MoviesListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View mView = inflater.inflate(R.layout.fragment_movies, container, false);
-
-        mLayoutManager = new GridLayoutManager(getContext(), getResources().getInteger(R.integer.movies_columns));
+        RecyclerView.LayoutManager mLayoutManager =
+                new GridLayoutManager(getContext(), getResources().getInteger(R.integer.movies_columns));
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.movies_recyclerview);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -107,7 +105,7 @@ public class MoviesFragment extends Fragment implements MoviesListener {
     @Override
     public void onFinishMovies(ArrayList<Movie> movies) {
         if (movies != null) {
-            mAdapter = new MoviesAdapter(getContext(), movies);
+            RecyclerView.Adapter mAdapter = new MoviesAdapter(getContext(), movies);
             mRecyclerView.setAdapter(mAdapter);
 
             if (mPosition != RecyclerView.NO_POSITION) {

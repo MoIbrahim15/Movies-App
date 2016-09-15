@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Mohamed Ibrahim on 9/14/2016.
- */
+ **/
 public class DetailsAdapter extends BaseAdapter {
 
     private static final int VIEW_TYPE_TRAILER = 0;
@@ -48,6 +48,13 @@ public class DetailsAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+
+    /**
+     * @param position  position
+     * @param view      view
+     * @param viewGroup viewGroup
+     * @return trailer or review view
+     */
 
     @Override
     public View getView(final int position, View view, ViewGroup viewGroup) {
@@ -89,17 +96,28 @@ public class DetailsAdapter extends BaseAdapter {
         return mView;
     }
 
+    /**
+     * @param position position
+     * @return view_type
+     */
+
     @Override
     public int getItemViewType(int position) {
         return (movieDetailesList.get(position)
                 instanceof Trailer) ? VIEW_TYPE_TRAILER : VIEW_TYPE_REVIEW;
     }
 
+    /**
+     * @return view types number
+     */
     @Override
     public int getViewTypeCount() {
         return VIEW_TYPE_COUNT;
     }
 
+    /**
+     * TrailerViewHolder
+     */
     public static class TrailerViewHolder {
         public final ImageView playView;
         public final TextView titleView;
@@ -111,6 +129,9 @@ public class DetailsAdapter extends BaseAdapter {
         }
     }
 
+    /**
+     * ReviewViewHolder
+     */
     public static class ReviewViewHolder {
         public final TextView authorView;
         public final TextView contentView;

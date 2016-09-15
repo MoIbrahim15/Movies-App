@@ -25,20 +25,20 @@ import java.util.ArrayList;
 public class DetailsMovieFragment extends Fragment implements TrailerReviewsListener {
 
     private Movie selectedMovie;
-    private ArrayList<Object> movieDetailesList = new ArrayList<>();
+    private ArrayList<Object> movieDetailList = new ArrayList<>();
+    private ListView mListView;
+    private DetailsAdapter detailsAdapter;
 
     static final String MOVIE_DATA = "MOVIE_DATA";
+    static final String SELECTED_MOVIE = "SELECTED_MOVIE";
 
     static final String BASE_POSTER_PATH = "http://image.tmdb.org/t/p/";
     static final String SIZE = "w185";
-    static final String FROMTEN = "/10";
+    static final String FROM_TEN = "/10";
 
-    private ListView mListView;
-    DetailsAdapter detailsAdapter;
-    private static final String SELECTED_MOVIE = "SELECTED_MOVIE";
-    private static final String TRAILERS_REVIEWS = "TRAILERS_REVIEWS";
 
     public DetailsMovieFragment() {
+        // Required empty public constructor
     }
 
     @Override
@@ -58,6 +58,9 @@ public class DetailsMovieFragment extends Fragment implements TrailerReviewsList
         View rootView = inflater.inflate(
                 R.layout.fragment_details_movie, container, false);
 
+        /**
+         * movie detail as a header in listview
+         */
         View headerView = inflater.inflate(
                 R.layout.details_header, null);
 
@@ -107,7 +110,7 @@ public class DetailsMovieFragment extends Fragment implements TrailerReviewsList
             Picasso.with(getContext()).load(FullPosterPath).into(posterView);
             titleView.setText(selectedMovie.getOriginalTitle());
             date_view.setText(selectedMovie.getReleaseDate());
-            rateView.setText(selectedMovie.getVoteAverage().toString() + FROMTEN);
+            rateView.setText(selectedMovie.getVoteAverage().toString() + FROM_TEN);
             descView.setText(selectedMovie.getOverview());
         }
     }
@@ -115,22 +118,13 @@ public class DetailsMovieFragment extends Fragment implements TrailerReviewsList
 
     @Override
     public void onFinishTrailers(ArrayList<Trailer> trailersArrayList) {
-        movieDetailesList.addAll(trailersArrayList);
+        movieDetailList.addAll(trailersArrayList);
     }
 
     @Override
     public void onFinishReviews(ArrayList<Review> reviewsArrayList) {
-        movieDetailesList.addAll(reviewsArrayList);
-//        for (int i = 0; i < movieDetailesList.size(); i++) {
-//            if (movieDetailesList.get(i) instanceof Trailer) {
-//                Log.v("Trailer", ((Trailer) movieDetailesList.get(i)).getKey());
-//            }
-//            if (movieDetailesList.get(i) instanceof Review) {
-//                Log.v("Review", ((Review) movieDetailesList.get(i)).getContent());
-//            }
-//        }
-
-        detailsAdapter = new DetailsAdapter(getContext(), movieDetailesList);
+        movieDetailList.addAll(reviewsArrayList);
+        detailsAdapter = new DetailsAdapter(getContext(), movieDetailList);
         mListView.setAdapter(detailsAdapter);
     }
 }

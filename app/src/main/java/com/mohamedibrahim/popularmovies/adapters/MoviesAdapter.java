@@ -23,6 +23,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     private Context context;
     private ArrayList<Movie> movies;
 
+    /**
+     * @param context context
+     * @param movies  moviesArrayList
+     */
     public MoviesAdapter(Context context, ArrayList<Movie> movies) {
         this.context = context;
         this.movies = movies;
@@ -36,8 +40,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     }
 
 
+    /**
+     * @param holder   viewholderfor movies
+     * @param position position
+     */
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         final String BASE_POSTER_PATH = "http://image.tmdb.org/t/p/";
         final String SIZE = "w185";
         String POSTER_PATH = movies.get(position).getPosterPath();
@@ -48,11 +56,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
             @Override
             public void onClick(View view) {
                 ((ClickListener) context)
-                        .onItemSelected(movies.get(position),position);
+                        .onItemSelected(movies.get(position), position);
             }
 
         });
     }
+
 
     @Override
     public int getItemCount() {
@@ -60,6 +69,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     }
 
 
+    /**
+     * viewHolder for movies
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView posterMovie;
 
