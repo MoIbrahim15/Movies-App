@@ -141,9 +141,13 @@ public class MoviesFragment extends Fragment implements MoviesListener, SwipeRef
                 }
             }
         } else {
-            mRecyclerView.setAdapter(null);
-            mNoMoviesNoConnectionView.setText(getString(R.string.no_movies));
-            mNoMoviesNoConnectionView.setVisibility(View.VISIBLE);
+            try {
+                mRecyclerView.setAdapter(null);
+                mNoMoviesNoConnectionView.setText(getResources().getString(R.string.no_movies));
+                mNoMoviesNoConnectionView.setVisibility(View.VISIBLE);
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            }
         }
         refreshLayout.setRefreshing(false);
     }
