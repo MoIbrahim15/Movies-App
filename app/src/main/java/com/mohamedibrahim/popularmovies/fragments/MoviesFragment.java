@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,12 +29,13 @@ import com.mohamedibrahim.popularmovies.models.Movie;
 
 import java.util.ArrayList;
 
-public class MoviesFragment extends Fragment implements MoviesListener {
+public class MoviesFragment extends Fragment implements MoviesListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String SELECTED_KEY = "selected_position";
     private int mPosition = RecyclerView.NO_POSITION;
     private RecyclerView mRecyclerView;
     private TextView mNoMoviesNoConnectionView;
+    private SwipeRefreshLayout refreshLayout;
     private boolean isTwoPane;
     private MoviesListener delegate = this;
 
@@ -68,6 +70,10 @@ public class MoviesFragment extends Fragment implements MoviesListener {
                              Bundle savedInstanceState) {
         View mView = inflater.inflate(R.layout.fragment_movies, container, false);
         mNoMoviesNoConnectionView = (TextView) mView.findViewById(R.id.no_movies_label);
+        refreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.refresh);
+        refreshLayout.setOnRefreshListener(this);
+        refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorGray));
+
         RecyclerView.LayoutManager mLayoutManager =
                 new GridLayoutManager(getContext(), getResources().getInteger(R.integer.movies_columns));
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.movies_recyclerview);
@@ -138,6 +144,7 @@ public class MoviesFragment extends Fragment implements MoviesListener {
             mNoMoviesNoConnectionView.setText(getString(R.string.no_movies));
             mNoMoviesNoConnectionView.setVisibility(View.VISIBLE);
         }
+        refreshLayout.setRefreshing(false);
     }
 
     public void setItemPosition(int position) {
@@ -161,5 +168,10 @@ public class MoviesFragment extends Fragment implements MoviesListener {
 
     public void onSortedByChanged() {
         mPosition = RecyclerView.NO_POSITION;
+    }
+
+    @Override
+    public void onRefresh() {
+        onStart();
     }
 }
