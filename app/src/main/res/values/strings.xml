@@ -2,6 +2,7 @@
     <string name="app_name">Popular Movies</string>
     <string name="movie_detail_title">Movie Detail</string>
     <string name="no_movies">No Movies Found</string>
+    <string name="no_connection">No Internet Connection</string>
 
     <string name="pref_sort_label">Sort By</string>
     <string name="pref_sort_popular_label">Most Popular</string>

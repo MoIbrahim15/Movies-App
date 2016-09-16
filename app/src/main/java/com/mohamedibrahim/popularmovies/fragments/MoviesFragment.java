@@ -14,7 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.mohamedibrahim.popularmovies.R;
 import com.mohamedibrahim.popularmovies.SettingsActivity;
@@ -33,6 +33,7 @@ public class MoviesFragment extends Fragment implements MoviesListener {
     private static final String SELECTED_KEY = "selected_position";
     private int mPosition = RecyclerView.NO_POSITION;
     private RecyclerView mRecyclerView;
+    private TextView mNoMoviesNoConnectionView;
     private boolean isTwoPane;
     private MoviesListener delegate = this;
 
@@ -66,6 +67,7 @@ public class MoviesFragment extends Fragment implements MoviesListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View mView = inflater.inflate(R.layout.fragment_movies, container, false);
+        mNoMoviesNoConnectionView = (TextView) mView.findViewById(R.id.no_movies_label);
         RecyclerView.LayoutManager mLayoutManager =
                 new GridLayoutManager(getContext(), getResources().getInteger(R.integer.movies_columns));
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.movies_recyclerview);
@@ -90,11 +92,15 @@ public class MoviesFragment extends Fragment implements MoviesListener {
     @Override
     public void onStart() {
         super.onStart();
+
         if (isOnline()) {
             updateMovies();
         } else {
-            Toast.makeText(getContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
+            mRecyclerView.setAdapter(null);
+            mNoMoviesNoConnectionView.setText(getString(R.string.no_connection));
+            mNoMoviesNoConnectionView.setVisibility(View.VISIBLE);
         }
+
     }
 
 
@@ -112,10 +118,10 @@ public class MoviesFragment extends Fragment implements MoviesListener {
 
     @Override
     public void onFinishMovies(ArrayList<Movie> movies) {
-        if (movies != null) {
+        if (movies != null && !movies.isEmpty()) {
             RecyclerView.Adapter mAdapter = new MoviesAdapter(getContext(), movies);
             mRecyclerView.setAdapter(mAdapter);
-
+            mNoMoviesNoConnectionView.setVisibility(View.GONE);
             if (mPosition != RecyclerView.NO_POSITION) {
                 mRecyclerView.scrollToPosition(mPosition);
             } else {
@@ -129,7 +135,8 @@ public class MoviesFragment extends Fragment implements MoviesListener {
             }
         } else {
             mRecyclerView.setAdapter(null);
-            Toast.makeText(getContext(), R.string.no_movies, Toast.LENGTH_LONG).show();
+            mNoMoviesNoConnectionView.setText(getString(R.string.no_movies));
+            mNoMoviesNoConnectionView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -150,5 +157,9 @@ public class MoviesFragment extends Fragment implements MoviesListener {
                 (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    public void onSortedByChanged() {
+        mPosition = RecyclerView.NO_POSITION;
     }
 }

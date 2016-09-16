@@ -8,23 +8,20 @@ import com.mohamedibrahim.popularmovies.fragments.DetailsMovieFragment;
 import com.mohamedibrahim.popularmovies.fragments.MoviesFragment;
 import com.mohamedibrahim.popularmovies.managers.interfaces.ClickListener;
 import com.mohamedibrahim.popularmovies.models.Movie;
-import com.mohamedibrahim.popularmovies.models.Review;
-import com.mohamedibrahim.popularmovies.models.Trailer;
 
-import java.util.ArrayList;
+public class MainActivity extends AppCompatActivity implements ClickListener {
 
-public class MainActivity extends AppCompatActivity implements ClickListener{
 
-    private ArrayList<Trailer> trailersArrayList = new ArrayList<>();
-    private ArrayList<Review> reviewsArrayList = new ArrayList<>();
     private boolean mTwoPane;
     private MoviesFragment moviesFragment;
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
     static final String MOVIE_DATA = "MOVIE_DATA";
+    private String mSortedBy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mSortedBy = Utility.getPreferredMovies(this);
         setContentView(R.layout.activity_main);
         if (findViewById(R.id.movies_detail_container) != null) {
             mTwoPane = true;
@@ -52,6 +49,14 @@ public class MainActivity extends AppCompatActivity implements ClickListener{
             getSupportActionBar().setTitle(R.string.pref_sort_top_label);
         } else if (sortedBy.equals(getString(R.string.pref_sort_favorite))) {
             getSupportActionBar().setTitle(R.string.pref_sort_favorite_label);
+        }
+
+        if (sortedBy != null && !sortedBy.equals(mSortedBy)) {
+            MoviesFragment mf = (MoviesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movies);
+            if (null != mf) {
+                mf.onSortedByChanged();
+            }
+            mSortedBy = sortedBy;
         }
     }
 
