@@ -116,10 +116,6 @@ public class MoviesFragment extends Fragment implements MoviesListener, SwipeRef
             MoviesDBHelper moviesDBHelper = new MoviesDBHelper(getContext());
             ArrayList<Movie> movies = moviesDBHelper.getAllMovies();
             delegate.onFinishMovies(movies);
-            if (getIsTwoPane()) {
-                if (!movies.isEmpty())
-                    openFirstMovie(movies);
-            }
         } else {
             MoviesManager moviesManager = new MoviesManager(getContext(), sortedBy, this);
             moviesManager.execute();
