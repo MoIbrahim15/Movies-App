@@ -116,6 +116,10 @@ public class MoviesFragment extends Fragment implements MoviesListener, SwipeRef
             MoviesDBHelper moviesDBHelper = new MoviesDBHelper(getContext());
             ArrayList<Movie> movies = moviesDBHelper.getAllMovies();
             delegate.onFinishMovies(movies);
+            if (getIsTwoPane()) {
+                if (!movies.isEmpty())
+                    openFirstMovie(movies);
+            }
         } else {
             MoviesManager moviesManager = new MoviesManager(getContext(), sortedBy, this);
             moviesManager.execute();
@@ -133,10 +137,7 @@ public class MoviesFragment extends Fragment implements MoviesListener, SwipeRef
             } else {
                 //first start && two pane
                 if (getIsTwoPane()) {
-                    final int FIRST_ARRAYLIST_POSITION = 0;
-                    ((ClickListener) getActivity())
-                            .onItemSelected(movies.get(FIRST_ARRAYLIST_POSITION),
-                                    FIRST_ARRAYLIST_POSITION);
+                    openFirstMovie(movies);
                 }
             }
         } else {
@@ -145,6 +146,13 @@ public class MoviesFragment extends Fragment implements MoviesListener, SwipeRef
             mNoMoviesNoConnectionView.setVisibility(View.VISIBLE);
         }
         refreshLayout.setRefreshing(false);
+    }
+
+    private void openFirstMovie(ArrayList<Movie> movies) {
+        final int FIRST_ARRAYLIST_POSITION = 0;
+        ((ClickListener) getActivity())
+                .onItemSelected(movies.get(FIRST_ARRAYLIST_POSITION),
+                        FIRST_ARRAYLIST_POSITION);
     }
 
     public void setItemPosition(int position) {
