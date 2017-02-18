@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.mohamedibrahim.popularmovies.R;
@@ -14,14 +16,18 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Mohamed Ibrahim on 7/31/2016.
- */
+ **/
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
 
     private Context context;
     private ArrayList<Movie> movies;
+    private int lastPosition = -1;
 
     /**
      * @param context context
@@ -35,8 +41,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     @Override
     public MoviesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View mView = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_recyclerview_item, parent, false);
-        ViewHolder viewHolder = new ViewHolder(mView);
-        return viewHolder;
+        return new ViewHolder(mView);
     }
 
 
@@ -45,21 +50,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
      * @param position position
      */
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         final String BASE_POSTER_PATH = "http://image.tmdb.org/t/p/";
         final String SIZE = "w185";
         String POSTER_PATH = movies.get(position).getPosterPath();
 
         String FullPosterPath = BASE_POSTER_PATH + SIZE + POSTER_PATH;
         Picasso.with(context).load(FullPosterPath).into(holder.posterMovie);
-        holder.posterMovie.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((ClickListener) context)
-                        .onItemSelected(movies.get(position), position);
-            }
-
-        });
+        setAnimation(holder.itemView, position);
     }
 
 
@@ -68,16 +66,47 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         return movies.size();
     }
 
-
     /**
      * viewHolder for movies
      */
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @BindView(R.id.movie_poster_img)
         ImageView posterMovie;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            posterMovie = (ImageView) itemView.findViewById(R.id.movie_poster_img);
+            ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int clickedPosition = getAdapterPosition();
+            ((ClickListener) context)
+                    .onItemSelected(movies.get(clickedPosition), clickedPosition);
+        }
+
+        public void clearAnimation() {
+            itemView.clearAnimation();
+        }
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(ViewHolder holder) {
+        holder.clearAnimation();
+    }
+
+    private void setAnimation(View viewToAnimate, int position) {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if (position > lastPosition) {
+            Animation animation;
+            if (position % 2 == 1) {
+                animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_right);
+            } else {
+                animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
+            }
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
         }
     }
 }

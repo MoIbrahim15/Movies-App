@@ -1,6 +1,5 @@
 package com.mohamedibrahim.popularmovies.managers;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 
@@ -21,13 +20,11 @@ import java.util.ArrayList;
 public class MoviesManager extends AsyncTask<Void, Void, ArrayList<Movie>> implements ConnectionListener {
 
     private MoviesListener delegate = null;
-    private Context mContext;
     private String jsonResponse = null;
     private String sortBy;
     private ArrayList<Movie> moviesArrayList = new ArrayList<>();
 
-    public MoviesManager(Context mContext, String sortBy, MoviesListener delegate) {
-        this.mContext = mContext;
+    public MoviesManager(String sortBy, MoviesListener delegate) {
         this.sortBy = sortBy;
         this.delegate = delegate;
     }

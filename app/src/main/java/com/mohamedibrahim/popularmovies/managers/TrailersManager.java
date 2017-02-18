@@ -1,6 +1,5 @@
 package com.mohamedibrahim.popularmovies.managers;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 
@@ -21,13 +20,11 @@ import java.util.ArrayList;
 public class TrailersManager extends AsyncTask<Void, Void, ArrayList<Trailer>> implements ConnectionListener {
 
     private TrailerReviewsListener delegate = null;
-    private Context mContext;
     private String movieID;
     private String jsonResponse = null;
     private ArrayList<Trailer> trailersArrayList = new ArrayList<>();
 
-    public TrailersManager(Context mContext, String movieID, TrailerReviewsListener delegate) {
-        this.mContext = mContext;
+    public TrailersManager(String movieID, TrailerReviewsListener delegate) {
         this.movieID = movieID;
         this.delegate = delegate;
     }

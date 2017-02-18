@@ -3,11 +3,13 @@ package com.mohamedibrahim.popularmovies;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 
 /**
  * Created by Mohamed Ibrahim on 9/13/2016.
- */
+ **/
 public class Utility {
 
     /**
@@ -36,4 +38,16 @@ public class Utility {
         }
         return installed;
     }
+
+    /**
+     * @param context context
+     * @return isOnline or not
+     */
+    public static boolean isOnline(Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
 }

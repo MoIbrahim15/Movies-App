@@ -11,7 +11,7 @@ import android.preference.PreferenceManager;
 
 /**
  * Created by Mohamed Ibrahim on 8/12/2016.
- */
+ **/
 public class SettingsActivity extends PreferenceActivity implements Preference.OnPreferenceChangeListener {
 
     @Override
@@ -27,27 +27,28 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 
         // Trigger the listener immediately with the preference's
         // current value.
-        onPreferenceChange(preference, PreferenceManager
-                .getDefaultSharedPreferences(preference.getContext())
+        onPreferenceChange(preference, PreferenceManager.
+                getDefaultSharedPreferences(preference.getContext())
                 .getString(preference.getKey(), ""));
     }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object value) {
         String stringValue = value.toString();
-        if(preference instanceof ListPreference){
+        if (preference instanceof ListPreference) {
             ListPreference listPreference = (ListPreference) preference;
-            int prefIndex =listPreference.findIndexOfValue(stringValue);
-            if(prefIndex>=0){
+            int prefIndex = listPreference.findIndexOfValue(stringValue);
+            if (prefIndex >= 0) {
                 preference.setSummary(listPreference.getEntries()[prefIndex]);
             }
-        }else {
+        } else {
             preference.setSummary(stringValue);
         }
         return true;
     }
 
 
+    @SuppressWarnings("all")
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public Intent getParentActivityIntent() {

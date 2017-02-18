@@ -1,6 +1,5 @@
 package com.mohamedibrahim.popularmovies.managers;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 
@@ -17,18 +16,16 @@ import java.util.ArrayList;
 
 /**
  * Created by Mohamed Ibrahim on 9/12/2016.
- */
+ **/
 
 public class ReviewsManager extends AsyncTask<Void, Void, ArrayList<Review>> implements ConnectionListener {
 
     private TrailerReviewsListener delegate = null;
-    private Context mContext;
     private String jsonResponse = null;
     private String movieID;
     private ArrayList<Review> reviewsArrayList = new ArrayList<>();
 
-    public ReviewsManager(Context mContext, String movieID, TrailerReviewsListener delegate) {
-        this.mContext = mContext;
+    public ReviewsManager(String movieID, TrailerReviewsListener delegate) {
         this.movieID = movieID;
         this.delegate = delegate;
     }

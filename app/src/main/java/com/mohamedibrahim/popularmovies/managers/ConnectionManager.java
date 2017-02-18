@@ -13,7 +13,7 @@ import java.net.URL;
 
 /**
  * Created by Mohamed Ibrahim on 7/31/2016.
- */
+ **/
 public class ConnectionManager {
     private HttpURLConnection urlConnection = null;
     private BufferedReader reader = null;
