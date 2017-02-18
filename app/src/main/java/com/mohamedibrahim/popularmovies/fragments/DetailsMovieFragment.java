@@ -47,6 +47,12 @@ public class DetailsMovieFragment extends Fragment implements TrailerReviewsList
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState == null) {
+            Bundle arguments = getArguments();
+            if (arguments != null) {
+                selectedMovie = arguments.getParcelable(MOVIE_DATA);
+            }
+        }
         moviesDBHelper = new MoviesDBHelper(getContext());
     }
 
