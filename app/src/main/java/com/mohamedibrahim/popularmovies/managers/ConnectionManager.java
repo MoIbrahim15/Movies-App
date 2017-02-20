@@ -1,7 +1,5 @@
 package com.mohamedibrahim.popularmovies.managers;
 
-import android.net.Uri;
-
 import com.mohamedibrahim.popularmovies.managers.interfaces.ConnectionListener;
 
 import java.io.BufferedReader;
@@ -19,14 +17,13 @@ public class ConnectionManager {
     private BufferedReader reader = null;
     private String jsonResponse = null;
 
-    public ConnectionManager(Uri buildUri, ConnectionListener listener) {
+    public ConnectionManager(URL buildUri, ConnectionListener listener) {
         jsonResponse = Connector(buildUri);
         if(jsonResponse!=null) listener.FinishConnection(jsonResponse);
     }
 
-    public String Connector(Uri buildUri) {
+    public String Connector(URL url) {
         try {
-            URL url = new URL(buildUri.toString());
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();

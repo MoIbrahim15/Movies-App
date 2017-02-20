@@ -1,9 +1,7 @@
 package com.mohamedibrahim.popularmovies.managers;
 
-import android.net.Uri;
 import android.os.AsyncTask;
 
-import com.mohamedibrahim.popularmovies.BuildConfig;
 import com.mohamedibrahim.popularmovies.managers.interfaces.ConnectionListener;
 import com.mohamedibrahim.popularmovies.managers.interfaces.TrailerReviewsListener;
 import com.mohamedibrahim.popularmovies.models.Review;
@@ -38,17 +36,8 @@ public class ReviewsManager extends AsyncTask<Void, Void, ArrayList<Review>> imp
     @Override
     protected ArrayList<Review> doInBackground(Void... voids) {
 
-        final String BASE_URL = "http://api.themoviedb.org/3/movie";
-        final String REVIEWS_PARAM = "reviews";
-        final String API_KEY_PARAM = "api_key";
-
-        Uri buildUri = Uri.parse(BASE_URL).buildUpon()
-                .appendPath(movieID)
-                .appendPath(REVIEWS_PARAM)
-                .appendQueryParameter(API_KEY_PARAM, BuildConfig.MOVIES_API_KEY)
-                .build();
-
-        new ConnectionManager(buildUri, this);
+        String REVIEWS_PARAM = "reviews";
+        new ConnectionManager(NetworkUtils.buildUrl(movieID, REVIEWS_PARAM), this);
         return getReviewsDataFromJson(jsonResponse);
     }
 

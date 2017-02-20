@@ -1,9 +1,7 @@
 package com.mohamedibrahim.popularmovies.managers;
 
-import android.net.Uri;
 import android.os.AsyncTask;
 
-import com.mohamedibrahim.popularmovies.BuildConfig;
 import com.mohamedibrahim.popularmovies.managers.interfaces.ConnectionListener;
 import com.mohamedibrahim.popularmovies.managers.interfaces.MoviesListener;
 import com.mohamedibrahim.popularmovies.models.Movie;
@@ -37,14 +35,7 @@ public class MoviesManager extends AsyncTask<Void, Void, ArrayList<Movie>> imple
     @Override
     protected ArrayList<Movie> doInBackground(Void... voids) {
 
-        final String BASE_URL = "http://api.themoviedb.org/3/movie";
-        final String API_KEY_PARAM = "api_key";
-
-        Uri buildUri = Uri.parse(BASE_URL).buildUpon()
-                .appendPath(sortBy)
-                .appendQueryParameter(API_KEY_PARAM, BuildConfig.MOVIES_API_KEY)
-                .build();
-        new ConnectionManager(buildUri, this);
+        new ConnectionManager(NetworkUtils.buildUrl(sortBy), this);
         return getMoviesDataFromJson(jsonResponse);
     }
 
