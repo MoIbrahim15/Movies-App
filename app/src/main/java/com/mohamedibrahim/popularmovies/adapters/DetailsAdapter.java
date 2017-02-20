@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mohamedibrahim.popularmovies.R;
-import com.mohamedibrahim.popularmovies.Utility;
+import com.mohamedibrahim.popularmovies.utils.Utility;
 import com.mohamedibrahim.popularmovies.models.Review;
 import com.mohamedibrahim.popularmovies.models.Trailer;
 

@@ -1,4 +1,4 @@
-package com.mohamedibrahim.popularmovies;
+package com.mohamedibrahim.popularmovies.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
+
+import com.mohamedibrahim.popularmovies.R;
 
 /**
  * Created by Mohamed Ibrahim on 9/13/2016.

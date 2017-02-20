@@ -2,20 +2,22 @@ package com.mohamedibrahim.popularmovies.managers;
 
 import android.os.AsyncTask;
 
-import com.mohamedibrahim.popularmovies.managers.interfaces.ConnectionListener;
 import com.mohamedibrahim.popularmovies.managers.interfaces.MoviesListener;
 import com.mohamedibrahim.popularmovies.models.Movie;
+import com.mohamedibrahim.popularmovies.utils.NetworkUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
  * Created by Mohamed Ibrahim on 7/29/2016.
  **/
-public class MoviesManager extends AsyncTask<Void, Void, ArrayList<Movie>> implements ConnectionListener {
+public class MoviesManager extends AsyncTask<Void, Void, ArrayList<Movie>> {
 
     private MoviesListener delegate = null;
     private String jsonResponse = null;
@@ -35,7 +37,13 @@ public class MoviesManager extends AsyncTask<Void, Void, ArrayList<Movie>> imple
     @Override
     protected ArrayList<Movie> doInBackground(Void... voids) {
 
-        new ConnectionManager(NetworkUtils.buildUrl(sortBy), this);
+        try {
+            URL url = NetworkUtils.buildUrl(sortBy);
+            jsonResponse = NetworkUtils.getResponseFromHttpUrl(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return getMoviesDataFromJson(jsonResponse);
     }
 
@@ -91,10 +99,5 @@ public class MoviesManager extends AsyncTask<Void, Void, ArrayList<Movie>> imple
             e.printStackTrace();
             return null;
         }
-    }
-
-    @Override
-    public void FinishConnection(String jsonResponse) {
-        this.jsonResponse = jsonResponse;
     }
 }

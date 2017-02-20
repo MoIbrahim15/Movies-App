@@ -8,6 +8,7 @@ import com.mohamedibrahim.popularmovies.fragments.DetailsMovieFragment;
 import com.mohamedibrahim.popularmovies.fragments.MoviesFragment;
 import com.mohamedibrahim.popularmovies.managers.interfaces.ClickListener;
 import com.mohamedibrahim.popularmovies.models.Movie;
+import com.mohamedibrahim.popularmovies.utils.Utility;
 
 public class MainActivity extends AppCompatActivity implements ClickListener {
 

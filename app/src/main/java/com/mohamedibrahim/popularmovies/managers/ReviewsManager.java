@@ -2,21 +2,23 @@ package com.mohamedibrahim.popularmovies.managers;
 
 import android.os.AsyncTask;
 
-import com.mohamedibrahim.popularmovies.managers.interfaces.ConnectionListener;
 import com.mohamedibrahim.popularmovies.managers.interfaces.TrailerReviewsListener;
 import com.mohamedibrahim.popularmovies.models.Review;
+import com.mohamedibrahim.popularmovies.utils.NetworkUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
  * Created by Mohamed Ibrahim on 9/12/2016.
  **/
 
-public class ReviewsManager extends AsyncTask<Void, Void, ArrayList<Review>> implements ConnectionListener {
+public class ReviewsManager extends AsyncTask<Void, Void, ArrayList<Review>>  {
 
     private TrailerReviewsListener delegate = null;
     private String jsonResponse = null;
@@ -37,7 +39,12 @@ public class ReviewsManager extends AsyncTask<Void, Void, ArrayList<Review>> imp
     protected ArrayList<Review> doInBackground(Void... voids) {
 
         String REVIEWS_PARAM = "reviews";
-        new ConnectionManager(NetworkUtils.buildUrl(movieID, REVIEWS_PARAM), this);
+        try {
+            URL url = NetworkUtils.buildUrl(movieID, REVIEWS_PARAM);
+            jsonResponse = NetworkUtils.getResponseFromHttpUrl(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return getReviewsDataFromJson(jsonResponse);
     }
 
@@ -78,8 +85,4 @@ public class ReviewsManager extends AsyncTask<Void, Void, ArrayList<Review>> imp
         }
     }
 
-    @Override
-    public void FinishConnection(String jsonResponse) {
-        this.jsonResponse = jsonResponse;
-    }
 }
