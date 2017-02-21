@@ -3,9 +3,13 @@ package com.mohamedibrahim.popularmovies.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,22 +20,26 @@ import android.widget.TextView;
 
 import com.mohamedibrahim.popularmovies.R;
 import com.mohamedibrahim.popularmovies.SettingsActivity;
-import com.mohamedibrahim.popularmovies.utils.Utility;
 import com.mohamedibrahim.popularmovies.adapters.MoviesAdapter;
 import com.mohamedibrahim.popularmovies.data.MoviesDBHelper;
-import com.mohamedibrahim.popularmovies.managers.MoviesManager;
-import com.mohamedibrahim.popularmovies.managers.interfaces.ClickListener;
-import com.mohamedibrahim.popularmovies.managers.interfaces.MoviesListener;
+import com.mohamedibrahim.popularmovies.interfaces.ClickListener;
 import com.mohamedibrahim.popularmovies.models.Movie;
+import com.mohamedibrahim.popularmovies.utils.JsonUtils;
+import com.mohamedibrahim.popularmovies.utils.NetworkUtils;
+import com.mohamedibrahim.popularmovies.utils.Utility;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MoviesFragment extends Fragment implements MoviesListener, SwipeRefreshLayout.OnRefreshListener {
+public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, LoaderManager.LoaderCallbacks<String> {
 
     private static final String SELECTED_KEY = "selected_position";
+    private static final String URL_EXTRA = "URL";
+    private static final int LOADER_ID = 1;
     private int mPosition = RecyclerView.NO_POSITION;
     private boolean isTwoPane;
 
@@ -72,10 +80,8 @@ public class MoviesFragment extends Fragment implements MoviesListener, SwipeRef
         } else {
             setError(R.string.no_connection);
         }
-
     }
 
-    @Override
     public void onFinishMovies(ArrayList<Movie> movies) {
         if (movies != null && !movies.isEmpty()) {
             MoviesAdapter mAdapter = new MoviesAdapter(getContext(), movies);
@@ -110,8 +116,15 @@ public class MoviesFragment extends Fragment implements MoviesListener, SwipeRef
             ArrayList<Movie> movies = moviesDBHelper.getAllMovies();
             this.onFinishMovies(movies);
         } else {
-            MoviesManager moviesManager = new MoviesManager(sortedBy, this);
-            moviesManager.execute();
+            Bundle queryBundle = new Bundle();
+            queryBundle.putString(URL_EXTRA, String.valueOf(NetworkUtils.buildUrl(sortedBy)));
+            LoaderManager loaderManager = getActivity().getSupportLoaderManager();
+            Loader<String> moviesLoader = loaderManager.getLoader(LOADER_ID);
+            if (moviesLoader == null) {
+                loaderManager.initLoader(LOADER_ID, queryBundle, this);
+            } else {
+                loaderManager.restartLoader(LOADER_ID, queryBundle, this);
+            }
         }
     }
 
@@ -175,4 +188,64 @@ public class MoviesFragment extends Fragment implements MoviesListener, SwipeRef
             refreshLayout.setRefreshing(false);
         }
     }
+
+    @Override
+    public Loader<String> onCreateLoader(int id, final Bundle args) {
+        return new AsyncTaskLoader<String>(getActivity()) {
+            String mJsonResult;
+
+            @Override
+            protected void onStartLoading() {
+                if (args == null) {
+                    return;
+                }
+                if (mJsonResult != null) {
+                    deliverResult(mJsonResult);
+                } else {
+                    forceLoad();
+                }
+            }
+
+            @Override
+            public String loadInBackground() {
+                try {
+                    String urlString = args.getString(URL_EXTRA);
+                    if (urlString == null || TextUtils.isEmpty(urlString)) {
+                        return null;
+                    } else {
+                        URL url = new URL(urlString);
+                        return NetworkUtils.getResponseFromHttpUrl(url);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            public void deliverResult(String jsonResult) {
+                mJsonResult = jsonResult;
+                super.deliverResult(mJsonResult);
+            }
+
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<String> loader, String data) {
+        if (null == data) {
+            setError(R.string.no_connection);
+        } else {
+            onFinishMovies(JsonUtils.getMoviesDataFromJson(data));
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<String> loader) {
+        /*
+         * We aren't using this method in application, but i required to Override
+         * it to implement the LoaderCallbacks<String> interface
+         */
+    }
+
 }

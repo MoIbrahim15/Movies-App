@@ -1,4 +1,4 @@
-package com.mohamedibrahim.popularmovies.managers.interfaces;
+package com.mohamedibrahim.popularmovies.interfaces;
 
 import com.mohamedibrahim.popularmovies.models.Movie;
 

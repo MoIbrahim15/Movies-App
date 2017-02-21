@@ -10,7 +10,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.mohamedibrahim.popularmovies.R;
-import com.mohamedibrahim.popularmovies.managers.interfaces.ClickListener;
+import com.mohamedibrahim.popularmovies.interfaces.ClickListener;
 import com.mohamedibrahim.popularmovies.models.Movie;
 import com.squareup.picasso.Picasso;
 
