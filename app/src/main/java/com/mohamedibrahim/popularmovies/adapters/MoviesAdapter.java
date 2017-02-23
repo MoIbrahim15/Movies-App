@@ -56,7 +56,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         String POSTER_PATH = movies.get(position).getPosterPath();
 
         String FullPosterPath = BASE_POSTER_PATH + SIZE + POSTER_PATH;
-        Picasso.with(context).load(FullPosterPath).into(holder.posterMovie);
+        Picasso.with(context)
+                .load(FullPosterPath)
+                .placeholder(R.drawable.progress)
+                .error(R.drawable.ic_error)
+                .into(holder.posterMovie);
         setAnimation(holder.itemView, position);
     }
 

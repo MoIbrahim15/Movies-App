@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 
 import com.mohamedibrahim.popularmovies.R;
 
@@ -52,4 +53,9 @@ public class Utility {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+    public static int calculateNoOfColumns(Context context) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        return (int) (dpWidth / 180);
+    }
 }

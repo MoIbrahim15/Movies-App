@@ -10,16 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorGreen"
-        android:elevation="2dp">
+        android:elevation="@dimen/d2">
 
         <TextView
             android:id="@+id/title_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="@dimen/d16"
             android:textColor="@android:color/white"
-            android:textSize="36sp" />
+            android:textSize="@dimen/s36" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -42,18 +42,18 @@
 
                 <ImageView
                     android:id="@+id/poster_img_detailed"
-                    android:layout_width="125dp"
-                    android:layout_height="175dp"
-                    android:layout_marginLeft="8dp"
+                    android:layout_width="@dimen/d125"
+                    android:layout_height="@dimen/d175"
+                    android:layout_marginLeft="@dimen/d8"
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="@dimen/d8"
+                    android:layout_marginLeft="@dimen/d16"
+                    android:layout_marginTop="@dimen/d8"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -69,9 +69,9 @@
 
                     <ToggleButton
                         android:id="@+id/favorite_btn"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_width="@dimen/d48"
+                        android:layout_height="@dimen/d48"
+                        android:layout_marginTop="@dimen/d20"
                         android:textOff=""
                         android:textOn="" />
                 </LinearLayout>
@@ -81,8 +81,8 @@
                 android:id="@+id/desc_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginBottom="@dimen/d8"
+                android:layout_marginTop="@dimen/d20"
                 android:fontFamily="sans-serif-condensed" />
 
         </LinearLayout>

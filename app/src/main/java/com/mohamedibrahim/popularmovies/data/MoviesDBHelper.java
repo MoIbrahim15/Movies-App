@@ -18,8 +18,6 @@ public class MoviesDBHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "moviesManager";
     private static final String TABLE_MOVIES = "movies";
-
-    // Contacts Table Columns names
     private static final String KEY_PRIMARY_ID = "primary_id";
     private static final String KEY_MOVIE_ID = "movie_id";
     private static final String KEY_ORIGINAL_TITLE = "original_title";

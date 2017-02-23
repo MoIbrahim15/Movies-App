@@ -14,5 +14,7 @@
     <string name="pref_sort_top" translatable="false">top_rated</string>
     <string name="pref_sort_favorite" translatable="false">favorite</string>
     <string name="action_setting">Settings</string>
+    <string name="videos_param">videos</string>
+    <string name="reviews_param">reviews</string>
 
 </resources>

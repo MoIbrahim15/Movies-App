@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="@dimen/d16">
 
     <TextView
         android:id="@+id/review_list_item_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-condensed"
-        android:textSize="16sp"
+        android:textSize="@dimen/s16"
         android:textStyle="bold" />
 
     <TextView

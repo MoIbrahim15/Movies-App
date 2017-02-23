@@ -106,7 +106,7 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorGray));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),
-                getResources().getInteger(R.integer.movies_columns)));
+                Utility.calculateNoOfColumns(getContext())));
     }
 
     private void updateMovies() {

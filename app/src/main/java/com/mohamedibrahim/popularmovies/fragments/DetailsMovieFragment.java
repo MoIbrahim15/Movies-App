@@ -54,9 +54,6 @@ public class DetailsMovieFragment extends Fragment /*implements*/ /*TrailerRevie
     private static final String TRAILER_URL_EXTRA = "TRAILER_URL";
     private static final String REVIEW_URL_EXTRA = "REVIEW_URL";
 
-    private String VIDEOS_PARAM = "videos";
-    private String REVIEWS_PARAM = "reviews";
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,15 +94,10 @@ public class DetailsMovieFragment extends Fragment /*implements*/ /*TrailerRevie
     public void onResume() {
         super.onResume();
         if (selectedMovie != null && detailsAdapter == null) {
-//            TrailersManager trailersManager = new TrailersManager(selectedMovie.getId().toString(), this);
-//            trailersManager.execute();
-//
-//            ReviewsManager reviewsManager = new ReviewsManager(selectedMovie.getId().toString(), this);
-//            reviewsManager.execute();
-//
+
             Bundle queryBundle = new Bundle();
-            URL trailerURL = NetworkUtils.buildUrl(selectedMovie.getId().toString(), VIDEOS_PARAM);
-            URL reviewURL = NetworkUtils.buildUrl(selectedMovie.getId().toString(), REVIEWS_PARAM);
+            URL trailerURL = NetworkUtils.buildUrl(selectedMovie.getId().toString(), getString(R.string.videos_param));
+            URL reviewURL = NetworkUtils.buildUrl(selectedMovie.getId().toString(), getString(R.string.reviews_param));
 
             queryBundle.putString(TRAILER_URL_EXTRA, String.valueOf(trailerURL));
             queryBundle.putString(REVIEW_URL_EXTRA, String.valueOf(reviewURL));
