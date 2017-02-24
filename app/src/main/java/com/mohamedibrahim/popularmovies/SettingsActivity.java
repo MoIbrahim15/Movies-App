@@ -4,49 +4,34 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
 /**
  * Created by Mohamed Ibrahim on 8/12/2016.
  **/
-public class SettingsActivity extends PreferenceActivity implements Preference.OnPreferenceChangeListener {
+public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.setting_pref);
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_sort_key)));
-    }
-
-    private void bindPreferenceSummaryToValue(Preference preference) {
-        // Set the listener to watch for value changes.
-        preference.setOnPreferenceChangeListener(this);
-
-        // Trigger the listener immediately with the preference's
-        // current value.
-        onPreferenceChange(preference, PreferenceManager.
-                getDefaultSharedPreferences(preference.getContext())
-                .getString(preference.getKey(), ""));
+        setContentView(R.layout.activity_settings);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
-    public boolean onPreferenceChange(Preference preference, Object value) {
-        String stringValue = value.toString();
-        if (preference instanceof ListPreference) {
-            ListPreference listPreference = (ListPreference) preference;
-            int prefIndex = listPreference.findIndexOfValue(stringValue);
-            if (prefIndex >= 0) {
-                preference.setSummary(listPreference.getEntries()[prefIndex]);
-            }
-        } else {
-            preference.setSummary(stringValue);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            NavUtils.navigateUpFromSameTask(this);
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
-
 
     @SuppressWarnings("all")
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

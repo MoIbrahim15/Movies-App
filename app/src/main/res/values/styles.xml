@@ -4,6 +4,7 @@
     <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
     <!-- Main activity theme. -->
@@ -15,9 +16,6 @@
     <style name="ActionBar.Solid.Movies.NoTitle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
     </style>
 
-    <style name="SettingsTheme" parent="AppTheme">
-
-    </style>
 
     <style name="labels_style">
         <item name="android:layout_height">wrap_content</item>
