@@ -114,7 +114,7 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
         if (sortedBy.equalsIgnoreCase(getString(R.string.pref_sort_favorite))) {
             MoviesDBHelper moviesDBHelper = new MoviesDBHelper(getContext());
             ArrayList<Movie> movies = moviesDBHelper.getAllMovies();
-            this.onFinishMovies(movies);
+            onFinishMovies(movies);
         } else {
             Bundle queryBundle = new Bundle();
             queryBundle.putString(URL_EXTRA, String.valueOf(NetworkUtils.buildUrl(sortedBy)));

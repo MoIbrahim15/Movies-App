@@ -6,9 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.mohamedibrahim.popularmovies.data.MovieContract.MovieEntry;
 import com.mohamedibrahim.popularmovies.models.Movie;
 
 import java.util.ArrayList;
+
 
 /**
  * Created by Mohamed Ibrahim on 9/15/2016.
@@ -17,21 +19,6 @@ public class MoviesDBHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "moviesManager";
-    private static final String TABLE_MOVIES = "movies";
-    private static final String KEY_PRIMARY_ID = "primary_id";
-    private static final String KEY_MOVIE_ID = "movie_id";
-    private static final String KEY_ORIGINAL_TITLE = "original_title";
-    private static final String KEY_DATE = "date";
-    private static final String KEY_VOTE = "vote";
-    private static final String KEY_OVERVIEW = "overview";
-    private static final String KEY_POSTER_PATH = "poster_path";
-    private static final String KEY_ADULT = "adult";
-    private static final String KEY_BACK_PATH = "back_drop_path";
-    private static final String KEY_ORIGINAL_LANGUAGE = "original_language";
-    private static final String KEY_POPULARITY = "popularity";
-    private static final String KEY_VIDEO = "video";
-    private static final String KEY_VOTE_COUNT = "vote_count";
-    private static final String KEY_TITLE = "title";
 
     public MoviesDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -41,14 +28,14 @@ public class MoviesDBHelper extends SQLiteOpenHelper {
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_MOVIES + "("
-                + KEY_PRIMARY_ID + " INTEGER PRIMARY KEY," + KEY_MOVIE_ID + " INTEGER,"
-                + KEY_ORIGINAL_TITLE + " TEXT," + KEY_DATE + " TEXT,"
-                + KEY_VOTE + " TEXT," + KEY_OVERVIEW + " TEXT,"
-                + KEY_POSTER_PATH + " TEXT," + KEY_ADULT + " INTEGER,"
-                + KEY_BACK_PATH + " TEXT," + KEY_ORIGINAL_LANGUAGE + " TEXT,"
-                + KEY_POPULARITY + " REAL," + KEY_VIDEO + " INTEGER,"
-                + KEY_VOTE_COUNT + " INTEGER," + KEY_TITLE + " TEXT" + ")";
+        String CREATE_CONTACTS_TABLE = "CREATE TABLE " + MovieEntry.TABLE_MOVIES + "("
+                + MovieEntry.KEY_PRIMARY_ID + " INTEGER PRIMARY KEY," + MovieEntry.KEY_MOVIE_ID + " INTEGER,"
+                + MovieEntry.KEY_ORIGINAL_TITLE + " TEXT," + MovieEntry.KEY_DATE + " TEXT,"
+                + MovieEntry.KEY_VOTE + " TEXT," + MovieEntry.KEY_OVERVIEW + " TEXT,"
+                + MovieEntry.KEY_POSTER_PATH + " TEXT," + MovieEntry.KEY_ADULT + " INTEGER,"
+                + MovieEntry.KEY_BACK_PATH + " TEXT," + MovieEntry.KEY_ORIGINAL_LANGUAGE + " TEXT,"
+                + MovieEntry.KEY_POPULARITY + " REAL," + MovieEntry.KEY_VIDEO + " INTEGER,"
+                + MovieEntry.KEY_VOTE_COUNT + " INTEGER," + MovieEntry.KEY_TITLE + " TEXT" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
@@ -56,7 +43,7 @@ public class MoviesDBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MOVIES);
+        db.execSQL("DROP TABLE IF EXISTS " + MovieEntry.TABLE_MOVIES);
 
         // Create tables again
         onCreate(db);
@@ -68,29 +55,29 @@ public class MoviesDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_MOVIE_ID, movie.getId());
-        values.put(KEY_ORIGINAL_TITLE, movie.getOriginalTitle());
-        values.put(KEY_DATE, movie.getReleaseDate());
-        values.put(KEY_VOTE, movie.getVoteAverage());
-        values.put(KEY_OVERVIEW, movie.getOverview());
-        values.put(KEY_POSTER_PATH, movie.getPosterPath());
-        values.put(KEY_ADULT, movie.getAdult() ? 1 : 0);
-        values.put(KEY_BACK_PATH, movie.getBackdropPath());
-        values.put(KEY_ORIGINAL_LANGUAGE, movie.getOriginalLanguage());
-        values.put(KEY_POPULARITY, movie.getPopularity());
-        values.put(KEY_VIDEO, movie.getVideo() ? 1 : 0);
-        values.put(KEY_VOTE_COUNT, movie.getVoteCount());
-        values.put(KEY_TITLE, movie.getTitle());
+        values.put(MovieEntry.KEY_MOVIE_ID, movie.getId());
+        values.put(MovieEntry.KEY_ORIGINAL_TITLE, movie.getOriginalTitle());
+        values.put(MovieEntry.KEY_DATE, movie.getReleaseDate());
+        values.put(MovieEntry.KEY_VOTE, movie.getVoteAverage());
+        values.put(MovieEntry.KEY_OVERVIEW, movie.getOverview());
+        values.put(MovieEntry.KEY_POSTER_PATH, movie.getPosterPath());
+        values.put(MovieEntry.KEY_ADULT, movie.getAdult() ? 1 : 0);
+        values.put(MovieEntry.KEY_BACK_PATH, movie.getBackdropPath());
+        values.put(MovieEntry.KEY_ORIGINAL_LANGUAGE, movie.getOriginalLanguage());
+        values.put(MovieEntry.KEY_POPULARITY, movie.getPopularity());
+        values.put(MovieEntry.KEY_VIDEO, movie.getVideo() ? 1 : 0);
+        values.put(MovieEntry.KEY_VOTE_COUNT, movie.getVoteCount());
+        values.put(MovieEntry.KEY_TITLE, movie.getTitle());
 
         // Inserting Row
-        db.insert(TABLE_MOVIES, null, values);
+        db.insert(MovieEntry.TABLE_MOVIES, null, values);
         db.close(); // Closing database connection
     }
 
     // Deleting single movie
     public void deleteMovie(Movie movie) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_MOVIES, KEY_MOVIE_ID + " = ?",
+        db.delete(MovieEntry.TABLE_MOVIES, MovieEntry.KEY_MOVIE_ID + " = ?",
                 new String[]{String.valueOf(movie.getId())});
         db.close();
     }
@@ -98,7 +85,7 @@ public class MoviesDBHelper extends SQLiteOpenHelper {
     public boolean ifMovieFavorite(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_MOVIES, null, KEY_MOVIE_ID + "=?",
+        Cursor cursor = db.query(MovieEntry.TABLE_MOVIES, null, MovieEntry.KEY_MOVIE_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
@@ -114,7 +101,7 @@ public class MoviesDBHelper extends SQLiteOpenHelper {
     public ArrayList<Movie> getAllMovies() {
         ArrayList<Movie> MovieDetailList = new ArrayList<Movie>();
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_MOVIES;
+        String selectQuery = "SELECT  * FROM " + MovieEntry.TABLE_MOVIES;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
