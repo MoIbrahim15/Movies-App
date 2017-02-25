@@ -20,7 +20,7 @@ import com.mohamedibrahim.popularmovies.adapters.DetailsAdapter;
 import com.mohamedibrahim.popularmovies.models.Movie;
 import com.mohamedibrahim.popularmovies.models.Review;
 import com.mohamedibrahim.popularmovies.models.Trailer;
-import com.mohamedibrahim.popularmovies.utils.DbUtils;
+import com.mohamedibrahim.popularmovies.utils.DBUtils;
 import com.mohamedibrahim.popularmovies.utils.JsonUtils;
 import com.mohamedibrahim.popularmovies.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
@@ -63,7 +63,6 @@ public class DetailsMovieFragment extends Fragment /*implements*/ /*TrailerRevie
                 selectedMovie = arguments.getParcelable(MOVIE_DATA);
             }
         }
-//        movieDBHelper = new MovieDBHelper(getContext());
     }
 
     @SuppressWarnings("all")
@@ -142,7 +141,7 @@ public class DetailsMovieFragment extends Fragment /*implements*/ /*TrailerRevie
             holder.descView.setText(selectedMovie.getOverview());
 
 
-            if (DbUtils.ifMovieFavorite(selectedMovie.getId(), getContext())) {
+            if (DBUtils.ifMovieFavorite(selectedMovie.getId(), getContext())) {
                 holder.favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite);
             } else {
                 holder.favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite_outline);
@@ -151,11 +150,11 @@ public class DetailsMovieFragment extends Fragment /*implements*/ /*TrailerRevie
             holder.favoriteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (DbUtils.ifMovieFavorite(selectedMovie.getId(), getContext())) {
-                        DbUtils.deleteMovie(selectedMovie.getId(), getContext());
+                    if (DBUtils.ifMovieFavorite(selectedMovie.getId(), getContext())) {
+                        DBUtils.deleteMovie(selectedMovie.getId(), getContext());
                         holder.favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite_outline);
                     } else {
-                        DbUtils.addMovie(selectedMovie, getContext());
+                        DBUtils.addMovie(selectedMovie, getContext());
                         holder.favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite);
                     }
                 }

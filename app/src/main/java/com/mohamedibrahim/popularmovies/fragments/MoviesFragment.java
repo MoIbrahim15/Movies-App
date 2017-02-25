@@ -2,6 +2,8 @@ package com.mohamedibrahim.popularmovies.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -25,7 +27,7 @@ import com.mohamedibrahim.popularmovies.SettingsActivity;
 import com.mohamedibrahim.popularmovies.adapters.MoviesAdapter;
 import com.mohamedibrahim.popularmovies.interfaces.ClickListener;
 import com.mohamedibrahim.popularmovies.models.Movie;
-import com.mohamedibrahim.popularmovies.utils.DbUtils;
+import com.mohamedibrahim.popularmovies.utils.DBUtils;
 import com.mohamedibrahim.popularmovies.utils.JsonUtils;
 import com.mohamedibrahim.popularmovies.utils.NetworkUtils;
 import com.mohamedibrahim.popularmovies.utils.Utility;
@@ -37,13 +39,15 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, LoaderManager.LoaderCallbacks<String> {
+public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, LoaderManager.LoaderCallbacks<String>, View.OnClickListener {
 
     private static final String SELECTED_KEY = "selected_position";
     private static final String URL_EXTRA = "URL";
     private static final int LOADER_ID = 1;
     private int mPosition = RecyclerView.NO_POSITION;
     private boolean isTwoPane;
+    private Snackbar snackbar;
+
     @BindView(R.id.pb_loading)
     ProgressBar progressBar;
     @BindView(R.id.movies_recyclerview)
@@ -52,6 +56,8 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
     ImageView imgPlaceHolder;
     @BindView(R.id.refresh)
     SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.coordinator)
+    CoordinatorLayout coordinator;
 
 
     @Override
@@ -81,7 +87,7 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
         if (Utility.isOnline(getContext())) {
             updateMovies();
         } else {
-            setError(R.string.no_connection);
+            showError(R.string.no_connection);
         }
     }
 
@@ -100,7 +106,7 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 }
             }
         } else {
-            setError(R.string.no_movies);
+            showError(R.string.no_movies);
         }
         stopRefreshing();
     }
@@ -117,7 +123,7 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
         progressBar.setVisibility(View.VISIBLE);
         String sortedBy = Utility.getPreferredMovies(getContext());
         if (sortedBy.equalsIgnoreCase(getString(R.string.pref_sort_favorite))) {
-            onFinishMovies(DbUtils.getAllMovies(getContext()));
+            onFinishMovies(DBUtils.getAllMovies(getContext()));
         } else {
             Bundle queryBundle = new Bundle();
             queryBundle.putString(URL_EXTRA, String.valueOf(NetworkUtils.buildUrl(sortedBy)));
@@ -179,15 +185,17 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
         onStart();
     }
 
-    private void setError(int errorResID) {
+    private void showError(int errorResID) {
         mRecyclerView.setAdapter(null);
         imgPlaceHolder.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
         if (errorResID == R.string.no_connection) {
             imgPlaceHolder.setImageResource(R.drawable.ic_error);
         } else if (errorResID == R.string.no_movies) {
             imgPlaceHolder.setImageResource(R.drawable.ic_empty);
         }
         stopRefreshing();
+        showSnackbar(errorResID, R.string.retry, this);
     }
 
     private void stopRefreshing() {
@@ -241,7 +249,7 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
     @Override
     public void onLoadFinished(Loader<String> loader, String data) {
         if (null == data) {
-            setError(R.string.no_connection);
+            showError(R.string.no_connection);
         } else {
             onFinishMovies(JsonUtils.getMoviesDataFromJson(data));
         }
@@ -255,4 +263,35 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
          */
     }
 
+    private void showSnackbar(int messageRes) {
+        showSnackbar(getString(messageRes));
+    }
+
+    private void showSnackbar(String message) {
+        hideSnackbar();
+        snackbar = Snackbar.make(coordinator, message, Snackbar.LENGTH_LONG);
+        snackbar.show();
+    }
+
+    private void showSnackbar(int messageRes, int actionMessageRes, View.OnClickListener onClickListener) {
+        showSnackbar(getString(messageRes), getString(actionMessageRes), onClickListener);
+    }
+
+    private void showSnackbar(String message, String actionMessage, View.OnClickListener onClickListener) {
+        hideSnackbar();
+        snackbar = Snackbar.make(coordinator, message, Snackbar.LENGTH_INDEFINITE)
+                .setAction(actionMessage, onClickListener);
+        snackbar.show();
+    }
+
+    private void hideSnackbar() {
+        if (snackbar != null && snackbar.isShown()) {
+            snackbar.dismiss();
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        updateMovies();
+    }
 }

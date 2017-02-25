@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Created by Mohamed Ibrahim on 2/25/2017.
  **/
 
-public class DbUtils {
+public class DBUtils {
 
 
     public static ArrayList<Movie> getAllMovies(Context context) {

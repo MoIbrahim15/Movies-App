@@ -22,5 +22,6 @@
     <string name="desc_img_poster">Movie Poster</string>
     <string name="dec_no_Data_no_connection">No Connection or data</string>
     <string name="double_points"> :</string>
+    <string name="retry">Retry</string>
 
 </resources>
