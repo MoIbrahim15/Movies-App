@@ -25,7 +25,7 @@ public class JsonUtils {
         final String POSTER_PATH = "poster_path";
         final String ADULT = "adult";
         final String OVERVIEW = "overview";
-        final String REALSE_DATE = "release_date";
+        final String RELEASE_DATE = "release_date";
         final String ID = "id";
         final String ORIGINAL_TITLE = "original_title";
         final String ORIGINAL_LANGUAGE = "original_language";
@@ -53,7 +53,7 @@ public class JsonUtils {
                 movie.setOriginalLanguage(movieObject.getString(ORIGINAL_LANGUAGE));
                 movie.setPosterPath(movieObject.getString(POSTER_PATH));
                 movie.setPopularity(movieObject.getDouble(POPULARITY));
-                movie.setReleaseDate(movieObject.getString(REALSE_DATE));
+                movie.setReleaseDate(movieObject.getString(RELEASE_DATE));
                 movie.setOriginalTitle(movieObject.getString(ORIGINAL_TITLE));
                 movie.setVoteCount(movieObject.getInt(VOTE_COUNT));
                 movie.setTitle(movieObject.getString(TITLE));

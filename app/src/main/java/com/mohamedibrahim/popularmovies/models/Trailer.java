@@ -28,7 +28,7 @@ public class Trailer implements Parcelable {
      *
      * @param in a parcel from which to read this object
      */
-    public Trailer(Parcel in) {
+    private Trailer(Parcel in) {
         id = in.readString();
         iso6391 = in.readString();
         iso31661 = in.readString();
@@ -40,24 +40,10 @@ public class Trailer implements Parcelable {
     }
 
     /**
-     * @return The id
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
      * @param id The id
      */
     public void setId(String id) {
         this.id = id;
-    }
-
-    /**
-     * @return The iso6391
-     */
-    public String getIso6391() {
-        return iso6391;
     }
 
     /**
@@ -67,12 +53,6 @@ public class Trailer implements Parcelable {
         this.iso6391 = iso6391;
     }
 
-    /**
-     * @return The iso31661
-     */
-    public String getIso31661() {
-        return iso31661;
-    }
 
     /**
      * @param iso31661 The iso_3166_1
@@ -109,12 +89,6 @@ public class Trailer implements Parcelable {
         this.name = name;
     }
 
-    /**
-     * @return The site
-     */
-    public String getSite() {
-        return site;
-    }
 
     /**
      * @param site The site
@@ -124,25 +98,12 @@ public class Trailer implements Parcelable {
     }
 
     /**
-     * @return The size
-     */
-    public Integer getSize() {
-        return size;
-    }
-
-    /**
      * @param size The size
      */
     public void setSize(Integer size) {
         this.size = size;
     }
 
-    /**
-     * @return The type
-     */
-    public String getType() {
-        return type;
-    }
 
     /**
      * @param type The type

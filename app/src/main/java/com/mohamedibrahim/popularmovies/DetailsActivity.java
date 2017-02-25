@@ -10,7 +10,7 @@ import com.mohamedibrahim.popularmovies.fragments.DetailsMovieFragment;
  **/
 public class DetailsActivity extends AppCompatActivity {
 
-    static final String MOVIE_DATA = "MOVIE_DATA";
+    private static final String MOVIE_DATA = "MOVIE_DATA";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

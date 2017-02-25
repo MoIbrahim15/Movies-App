@@ -29,20 +29,13 @@ public class Review implements Parcelable {
      *
      * @param in a parcel from which to read this object
      */
-    public Review(Parcel in) {
+    private Review(Parcel in) {
         id = in.readString();
         author = in.readString();
         content = in.readString();
         url = in.readString();
     }
 
-
-    /**
-     * @return The id
-     */
-    public String getId() {
-        return id;
-    }
 
     /**
      * @param id The id
@@ -79,12 +72,6 @@ public class Review implements Parcelable {
         this.content = content;
     }
 
-    /**
-     * @return The url
-     */
-    public String getUrl() {
-        return url;
-    }
 
     /**
      * @param url The url

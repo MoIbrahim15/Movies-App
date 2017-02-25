@@ -5,20 +5,15 @@
     android:orientation="horizontal"
     android:padding="@dimen/d16">
 
-    <ImageView
-        android:id="@+id/trailer_list_item_play"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_play_trailer" />
-
     <TextView
         android:id="@+id/trailer_list_item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/d16"
+        android:drawableLeft="@drawable/ic_play_trailer"
+        android:drawableStart="@drawable/ic_play_trailer"
         android:fontFamily="sans-serif-condensed"
+        android:gravity="center"
         android:textSize="@dimen/s20"
         android:textStyle="bold" />
 </LinearLayout>

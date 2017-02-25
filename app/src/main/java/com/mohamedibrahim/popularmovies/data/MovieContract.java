@@ -1,15 +1,25 @@
 package com.mohamedibrahim.popularmovies.data;
 
+import android.net.Uri;
+import android.provider.BaseColumns;
+
 /**
  * Created by Mohamed Ibrahim on 2/24/2017.
  **/
 
 public class MovieContract {
 
-    public static final class MovieEntry /*implements BaseColumns */ {
+    public static final String AUTHORITY = "com.mohamedibrahim.popularmovies";
+    private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
+    public static final String PATH_MOVIES = "movies";
+
+
+    public static final class MovieEntry implements BaseColumns {
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIES).build();
 
         public static final String TABLE_MOVIES = "movies";
-        public static final String KEY_PRIMARY_ID = "primary_id";
         public static final String KEY_MOVIE_ID = "movie_id";
         public static final String KEY_ORIGINAL_TITLE = "original_title";
         public static final String KEY_DATE = "date";

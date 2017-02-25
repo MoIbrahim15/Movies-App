@@ -15,13 +15,18 @@
             android:scrollbars="none" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <TextView
-        android:id="@+id/no_movies_label"
+    <ImageView
+        android:id="@+id/iv_placeholder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/s20"
-        android:textStyle="bold"
+        android:contentDescription="@string/dec_no_Data_no_connection"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/pb_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:visibility="gone" />
 </RelativeLayout>

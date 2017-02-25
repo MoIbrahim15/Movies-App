@@ -15,8 +15,8 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
 
     private boolean mTwoPane;
     private MoviesFragment moviesFragment;
-    private static final String DETAILFRAGMENT_TAG = "DFTAG";
-    static final String MOVIE_DATA = "MOVIE_DATA";
+    private static final String DETAIL_FRAGMENT_TAG = "DFTAG";
+    private static final String MOVIE_DATA = "MOVIE_DATA";
     private String mSortedBy;
 
     @Override
@@ -28,12 +28,14 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
             mTwoPane = true;
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.movies_detail_container, new DetailsMovieFragment(), DETAILFRAGMENT_TAG)
+                        .replace(R.id.movies_detail_container, new DetailsMovieFragment(), DETAIL_FRAGMENT_TAG)
                         .commit();
             }
         } else {
             mTwoPane = false;
-            getSupportActionBar().setElevation(0f);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setElevation(0f);
+            }
         }
         moviesFragment = ((MoviesFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_movies));
@@ -44,15 +46,16 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
     protected void onResume() {
         super.onResume();
         String sortedBy = Utility.getPreferredMovies(this);
-        if (sortedBy.equals(getString(R.string.pref_sort_popular))) {
-            getSupportActionBar().setTitle(R.string.pref_sort_popular_label);
-        } else if (sortedBy.equals(getString(R.string.pref_sort_top))) {
-            getSupportActionBar().setTitle(R.string.pref_sort_top_label);
-        } else if (sortedBy.equals(getString(R.string.pref_sort_favorite))) {
-            getSupportActionBar().setTitle(R.string.pref_sort_favorite_label);
+        if (getSupportActionBar() != null) {
+            if (sortedBy.equals(getString(R.string.pref_sort_popular))) {
+                getSupportActionBar().setTitle(R.string.pref_sort_popular_label);
+            } else if (sortedBy.equals(getString(R.string.pref_sort_top))) {
+                getSupportActionBar().setTitle(R.string.pref_sort_top_label);
+            } else if (sortedBy.equals(getString(R.string.pref_sort_favorite))) {
+                getSupportActionBar().setTitle(R.string.pref_sort_favorite_label);
+            }
         }
-
-        if (sortedBy != null && !sortedBy.equals(mSortedBy)) {
+        if (!sortedBy.equals(mSortedBy)) {
             MoviesFragment mf = (MoviesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movies);
             if (null != mf) {
                 mf.onSortedByChanged();
@@ -73,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
             fragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.movies_detail_container, fragment, DETAILFRAGMENT_TAG)
+                    .replace(R.id.movies_detail_container, fragment, DETAIL_FRAGMENT_TAG)
                     .commit();
         } else {
             Intent detailedIntent = new Intent(this, DetailsActivity.class);

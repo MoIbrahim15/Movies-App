@@ -46,7 +46,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
 
     /**
-     * @param holder   viewholderfor movies
+     * @param holder   viewHolder for movies
      * @param position position
      */
     @Override

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,14 +17,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.mohamedibrahim.popularmovies.R;
 import com.mohamedibrahim.popularmovies.SettingsActivity;
 import com.mohamedibrahim.popularmovies.adapters.MoviesAdapter;
-import com.mohamedibrahim.popularmovies.data.MoviesDBHelper;
 import com.mohamedibrahim.popularmovies.interfaces.ClickListener;
 import com.mohamedibrahim.popularmovies.models.Movie;
+import com.mohamedibrahim.popularmovies.utils.DbUtils;
 import com.mohamedibrahim.popularmovies.utils.JsonUtils;
 import com.mohamedibrahim.popularmovies.utils.NetworkUtils;
 import com.mohamedibrahim.popularmovies.utils.Utility;
@@ -42,11 +44,12 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
     private static final int LOADER_ID = 1;
     private int mPosition = RecyclerView.NO_POSITION;
     private boolean isTwoPane;
-
+    @BindView(R.id.pb_loading)
+    ProgressBar progressBar;
     @BindView(R.id.movies_recyclerview)
     RecyclerView mRecyclerView;
-    @BindView(R.id.no_movies_label)
-    TextView mNoMoviesNoConnectionView;
+    @BindView(R.id.iv_placeholder)
+    ImageView imgPlaceHolder;
     @BindView(R.id.refresh)
     SwipeRefreshLayout refreshLayout;
 
@@ -82,11 +85,12 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
         }
     }
 
-    public void onFinishMovies(ArrayList<Movie> movies) {
+    private void onFinishMovies(ArrayList<Movie> movies) {
+        progressBar.setVisibility(View.GONE);
         if (movies != null && !movies.isEmpty()) {
             MoviesAdapter mAdapter = new MoviesAdapter(getContext(), movies);
             mRecyclerView.setAdapter(mAdapter);
-            mNoMoviesNoConnectionView.setVisibility(View.GONE);
+            imgPlaceHolder.setVisibility(View.GONE);
             if (mPosition != RecyclerView.NO_POSITION) {
                 mRecyclerView.scrollToPosition(mPosition);
             } else {
@@ -103,18 +107,17 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     private void initRecyclerView() {
         refreshLayout.setOnRefreshListener(this);
-        refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorGray));
+        refreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorGray));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),
                 Utility.calculateNoOfColumns(getContext())));
     }
 
     private void updateMovies() {
+        progressBar.setVisibility(View.VISIBLE);
         String sortedBy = Utility.getPreferredMovies(getContext());
         if (sortedBy.equalsIgnoreCase(getString(R.string.pref_sort_favorite))) {
-            MoviesDBHelper moviesDBHelper = new MoviesDBHelper(getContext());
-            ArrayList<Movie> movies = moviesDBHelper.getAllMovies();
-            onFinishMovies(movies);
+            onFinishMovies(DbUtils.getAllMovies(getContext()));
         } else {
             Bundle queryBundle = new Bundle();
             queryBundle.putString(URL_EXTRA, String.valueOf(NetworkUtils.buildUrl(sortedBy)));
@@ -129,10 +132,10 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
     }
 
     private void openFirstMovie(ArrayList<Movie> movies) {
-        final int FIRST_ARRAYLIST_POSITION = 0;
+        final int FIRST_ARRAY_LIST_POSITION = 0;
         ((ClickListener) getActivity())
-                .onItemSelected(movies.get(FIRST_ARRAYLIST_POSITION),
-                        FIRST_ARRAYLIST_POSITION);
+                .onItemSelected(movies.get(FIRST_ARRAY_LIST_POSITION),
+                        FIRST_ARRAY_LIST_POSITION);
     }
 
     public void setItemPosition(int position) {
@@ -176,14 +179,18 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
         onStart();
     }
 
-    public void setError(int errorResID) {
+    private void setError(int errorResID) {
         mRecyclerView.setAdapter(null);
-        mNoMoviesNoConnectionView.setText(getString(errorResID));
-        mNoMoviesNoConnectionView.setVisibility(View.VISIBLE);
+        imgPlaceHolder.setVisibility(View.VISIBLE);
+        if (errorResID == R.string.no_connection) {
+            imgPlaceHolder.setImageResource(R.drawable.ic_error);
+        } else if (errorResID == R.string.no_movies) {
+            imgPlaceHolder.setImageResource(R.drawable.ic_empty);
+        }
         stopRefreshing();
     }
 
-    public void stopRefreshing() {
+    private void stopRefreshing() {
         if (refreshLayout.isRefreshing()) {
             refreshLayout.setRefreshing(false);
         }

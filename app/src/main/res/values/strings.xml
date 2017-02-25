@@ -17,4 +17,10 @@
     <string name="videos_param">videos</string>
     <string name="reviews_param">reviews</string>
 
+
+
+    <string name="desc_img_poster">Movie Poster</string>
+    <string name="dec_no_Data_no_connection">No Connection or data</string>
+    <string name="double_points"> :</string>
+
 </resources>

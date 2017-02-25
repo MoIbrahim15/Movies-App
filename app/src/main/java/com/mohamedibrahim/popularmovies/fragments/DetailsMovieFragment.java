@@ -17,10 +17,10 @@ import android.widget.ToggleButton;
 
 import com.mohamedibrahim.popularmovies.R;
 import com.mohamedibrahim.popularmovies.adapters.DetailsAdapter;
-import com.mohamedibrahim.popularmovies.data.MoviesDBHelper;
 import com.mohamedibrahim.popularmovies.models.Movie;
 import com.mohamedibrahim.popularmovies.models.Review;
 import com.mohamedibrahim.popularmovies.models.Trailer;
+import com.mohamedibrahim.popularmovies.utils.DbUtils;
 import com.mohamedibrahim.popularmovies.utils.JsonUtils;
 import com.mohamedibrahim.popularmovies.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
@@ -41,7 +41,6 @@ public class DetailsMovieFragment extends Fragment /*implements*/ /*TrailerRevie
     ListView mListView;
 
     private DetailsAdapter detailsAdapter;
-    private MoviesDBHelper moviesDBHelper;
 
     private static final String MOVIE_DATA = "MOVIE_DATA";
     private static final String SELECTED_MOVIE = "SELECTED_MOVIE";
@@ -64,9 +63,10 @@ public class DetailsMovieFragment extends Fragment /*implements*/ /*TrailerRevie
                 selectedMovie = arguments.getParcelable(MOVIE_DATA);
             }
         }
-        moviesDBHelper = new MoviesDBHelper(getContext());
+//        movieDBHelper = new MovieDBHelper(getContext());
     }
 
+    @SuppressWarnings("all")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -137,11 +137,12 @@ public class DetailsMovieFragment extends Fragment /*implements*/ /*TrailerRevie
             Picasso.with(getContext()).load(FullPosterPath).into(holder.posterView);
             holder.titleView.setText(selectedMovie.getOriginalTitle());
             holder.date_view.setText(selectedMovie.getReleaseDate());
-            holder.rateView.setText(selectedMovie.getVoteAverage().toString() + FROM_TEN);
+            String Vote = selectedMovie.getVoteAverage().toString() + FROM_TEN;
+            holder.rateView.setText(Vote);
             holder.descView.setText(selectedMovie.getOverview());
 
 
-            if (moviesDBHelper.ifMovieFavorite(selectedMovie.getId())) {
+            if (DbUtils.ifMovieFavorite(selectedMovie.getId(), getContext())) {
                 holder.favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite);
             } else {
                 holder.favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite_outline);
@@ -150,11 +151,11 @@ public class DetailsMovieFragment extends Fragment /*implements*/ /*TrailerRevie
             holder.favoriteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (moviesDBHelper.ifMovieFavorite(selectedMovie.getId())) {
-                        moviesDBHelper.deleteMovie(selectedMovie);
+                    if (DbUtils.ifMovieFavorite(selectedMovie.getId(), getContext())) {
+                        DbUtils.deleteMovie(selectedMovie.getId(), getContext());
                         holder.favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite_outline);
                     } else {
-                        moviesDBHelper.addMovie(selectedMovie);
+                        DbUtils.addMovie(selectedMovie, getContext());
                         holder.favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite);
                     }
                 }
@@ -163,13 +164,13 @@ public class DetailsMovieFragment extends Fragment /*implements*/ /*TrailerRevie
     }
 
 
-    public void onFinishTrailers(ArrayList<Trailer> trailersArrayList) {
+    private void onFinishTrailers(ArrayList<Trailer> trailersArrayList) {
         movieDetailList.addAll(trailersArrayList);
         detailsAdapter = new DetailsAdapter(getContext(), movieDetailList);
         mListView.setAdapter(detailsAdapter);
     }
 
-    public void onFinishReviews(ArrayList<Review> reviewsArrayList) {
+    private void onFinishReviews(ArrayList<Review> reviewsArrayList) {
         movieDetailList.addAll(reviewsArrayList);
         detailsAdapter = new DetailsAdapter(getContext(), movieDetailList);
         mListView.setAdapter(detailsAdapter);

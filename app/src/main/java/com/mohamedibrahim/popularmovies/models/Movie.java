@@ -35,7 +35,7 @@ public class Movie implements Parcelable {
      *
      * @param in a parcel from which to read this object
      */
-    public Movie(Parcel in) {
+    private Movie(Parcel in) {
         posterPath = in.readString();
         adult = in.readByte() != 0;
         overview = in.readString();

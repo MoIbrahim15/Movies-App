@@ -4,10 +4,11 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:layout_centerInParent="true"
         android:id="@+id/movie_poster_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_centerInParent="true"
         android:adjustViewBounds="true"
-        android:scaleType="fitXY"/>
+        android:contentDescription="@string/desc_img_poster"
+        android:scaleType="fitXY" />
 </RelativeLayout>
