@@ -11,4 +11,13 @@
         android:adjustViewBounds="true"
         android:contentDescription="@string/desc_img_poster"
         android:scaleType="fitXY" />
+
+    <ToggleButton
+        android:id="@+id/favorite_btn"
+        android:layout_width="@dimen/d48"
+        android:layout_height="@dimen/d48"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:textOff=""
+        android:textOn="" />
 </RelativeLayout>

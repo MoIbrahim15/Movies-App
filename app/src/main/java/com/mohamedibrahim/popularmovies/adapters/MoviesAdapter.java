@@ -8,10 +8,12 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.ToggleButton;
 
 import com.mohamedibrahim.popularmovies.R;
 import com.mohamedibrahim.popularmovies.interfaces.ClickListener;
 import com.mohamedibrahim.popularmovies.models.Movie;
+import com.mohamedibrahim.popularmovies.utils.DBUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -50,10 +52,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
      * @param position position
      */
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final String BASE_POSTER_PATH = "http://image.tmdb.org/t/p/";
         final String SIZE = "w185";
-        String POSTER_PATH = movies.get(position).getPosterPath();
+        final Movie movie = movies.get(position);
+        String POSTER_PATH = movie.getPosterPath();
 
         String FullPosterPath = BASE_POSTER_PATH + SIZE + POSTER_PATH;
         Picasso.with(context)
@@ -61,6 +64,25 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
                 .placeholder(R.drawable.progress)
                 .error(R.drawable.ic_error)
                 .into(holder.posterMovie);
+
+        if (DBUtils.ifMovieFavorite(movie.getId(), context)) {
+            holder.favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite);
+        } else {
+            holder.favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite_outline);
+        }
+
+        holder.favoriteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (DBUtils.ifMovieFavorite(movie.getId(), context)) {
+                    DBUtils.deleteMovie(movie.getId(), context);
+                    holder.favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite_outline);
+                } else {
+                    DBUtils.addMovie(movie, context);
+                    holder.favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite);
+                }
+            }
+        });
         setAnimation(holder.itemView, position);
     }
 
@@ -76,6 +98,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.movie_poster_img)
         ImageView posterMovie;
+        @BindView(R.id.favorite_btn)
+        ToggleButton favoriteBtn;
 
         public ViewHolder(View itemView) {
             super(itemView);
