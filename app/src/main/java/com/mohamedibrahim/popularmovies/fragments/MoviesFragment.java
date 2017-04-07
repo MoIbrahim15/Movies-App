@@ -84,6 +84,10 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
     @Override
     public void onStart() {
         super.onStart();
+        fetchMoviesFromAPI();
+    }
+
+    public void fetchMoviesFromAPI() {
         if (Utility.isOnline(getContext())) {
             updateMovies();
         } else {
@@ -182,7 +186,7 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     @Override
     public void onRefresh() {
-        onStart();
+        fetchMoviesFromAPI();
     }
 
     private void showError(int errorResID) {

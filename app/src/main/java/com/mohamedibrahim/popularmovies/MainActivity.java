@@ -2,6 +2,8 @@ package com.mohamedibrahim.popularmovies;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 
 import com.mohamedibrahim.popularmovies.fragments.DetailsMovieFragment;
@@ -72,12 +74,22 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
             // fragment transaction.
             Bundle args = new Bundle();
             args.putParcelable(MOVIE_DATA, movie);
-            DetailsMovieFragment fragment = new DetailsMovieFragment();
+            final DetailsMovieFragment fragment = new DetailsMovieFragment();
             fragment.setArguments(args);
 
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.movies_detail_container, fragment, DETAIL_FRAGMENT_TAG)
-                    .commit();
+            final int WHAT = 1;
+            Handler handler = new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    if (msg.what == WHAT) {
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.movies_detail_container, fragment, DETAIL_FRAGMENT_TAG)
+                                .commit();
+                    }
+                }
+            };
+            handler.sendEmptyMessage(WHAT);
+
         } else {
             Intent detailedIntent = new Intent(this, DetailsActivity.class);
             detailedIntent.putExtra(MOVIE_DATA, movie);
