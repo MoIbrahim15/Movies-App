@@ -50,10 +50,16 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 + MovieEntry.KEY_VOTE_COUNT + " INTEGER, " + MovieEntry.KEY_TITLE + " TEXT " + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
+//    private static final String DATABASE_ALTER_TEAM_1 = "ALTER TABLE "
+//            + MovieEntry.TABLE_MOVIES + " ADD COLUMN " + MovieEntry.COLUMN_... + " string;";
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + MovieEntry.TABLE_MOVIES);
-        onCreate(db);
+//        db.execSQL("DROP TABLE IF EXISTS " + MovieEntry.TABLE_MOVIES);
+//        onCreate(db);
+        //        TODO when updatind DB must make ulter query for updating table instead of drop table and recreeate it again:)
+        if (oldVersion < 3) {
+//            db.execSQL(DATABASE_ALTER_TEAM_1);
+        }
     }
 }
