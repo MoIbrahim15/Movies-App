@@ -2,6 +2,7 @@ package com.mohamedibrahim.popularmovies.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -10,8 +11,10 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -58,7 +61,10 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
     SwipeRefreshLayout refreshLayout;
     @BindView(R.id.coordinator)
     CoordinatorLayout coordinator;
-
+    @BindView(R.id.collapsing_toolbar_layout)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.app_bar)
+    Toolbar toolbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,7 +83,9 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
         }
 
         initRecyclerView();
-
+        toolbar.inflateMenu(R.menu.main);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+//        ((AppCompatActivity)getActivity()).getSupportActionBar().i
         return mView;
     }
 
@@ -86,6 +94,24 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
         super.onStart();
         fetchMoviesFromAPI();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setFragmentTitle();
+    }
+
+    private void setFragmentTitle() {
+        String sortedBy = Utility.getPreferredMovies(getActivity());
+        if (sortedBy.equals(getString(R.string.pref_sort_popular))) {
+            collapsingToolbarLayout.setTitle(getString(R.string.pref_sort_popular_label));
+        } else if (sortedBy.equals(getString(R.string.pref_sort_top))) {
+            collapsingToolbarLayout.setTitle(getString(R.string.pref_sort_top_label));
+        } else if (sortedBy.equals(getString(R.string.pref_sort_favorite))) {
+            collapsingToolbarLayout.setTitle(getString(R.string.pref_sort_favorite_label));
+        }
+    }
+
 
     public void fetchMoviesFromAPI() {
         if (Utility.isOnline(getContext())) {

@@ -1,19 +1,10 @@
 <resources>
 
     <!-- Customize your theme here. -->
-    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
-    </style>
-
-    <!-- Main activity theme. -->
-    <style name="MoviesTheme" parent="AppTheme">
-        <item name="actionBarStyle">@style/ActionBar.Solid.Movies.NoTitle</item>
-    </style>
-
-    <!-- main activity action bar styles -->
-    <style name="ActionBar.Solid.Movies.NoTitle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
     </style>
 
 

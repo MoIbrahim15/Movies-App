@@ -48,15 +48,6 @@ public class MainActivity extends AppCompatActivity implements ClickListener {
     protected void onResume() {
         super.onResume();
         String sortedBy = Utility.getPreferredMovies(this);
-        if (getSupportActionBar() != null) {
-            if (sortedBy.equals(getString(R.string.pref_sort_popular))) {
-                getSupportActionBar().setTitle(R.string.pref_sort_popular_label);
-            } else if (sortedBy.equals(getString(R.string.pref_sort_top))) {
-                getSupportActionBar().setTitle(R.string.pref_sort_top_label);
-            } else if (sortedBy.equals(getString(R.string.pref_sort_favorite))) {
-                getSupportActionBar().setTitle(R.string.pref_sort_favorite_label);
-            }
-        }
         if (!sortedBy.equals(mSortedBy)) {
             MoviesFragment mf = (MoviesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movies);
             if (null != mf) {
