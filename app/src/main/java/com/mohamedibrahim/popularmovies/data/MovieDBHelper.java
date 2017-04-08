@@ -13,11 +13,26 @@ import com.mohamedibrahim.popularmovies.data.MovieContract.MovieEntry;
 @SuppressWarnings("all")
 public class MovieDBHelper extends SQLiteOpenHelper {
 
+    private static MovieDBHelper sInstance;
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "moviesManager";
 
-    @SuppressWarnings("all")
-    public MovieDBHelper(Context context) {
+    public static synchronized MovieDBHelper getInstance(Context context) {
+
+        // Use the application context, which will ensure that you
+        // don't accidentally leak an Activity's context.
+        // See this article for more information: http://bit.ly/6LRzfx
+        if (sInstance == null) {
+            sInstance = new MovieDBHelper(context.getApplicationContext());
+        }
+        return sInstance;
+    }
+
+    /**
+     * Constructor should be private to prevent direct instantiation.
+     * make call to static method "getInstance()" instead.
+     */
+    private MovieDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
