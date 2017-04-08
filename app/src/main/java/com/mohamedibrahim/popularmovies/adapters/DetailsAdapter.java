@@ -79,7 +79,9 @@ public class DetailsAdapter extends BaseAdapter {
                         } else {
                             trailerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoUrlForBrowser + videoKEY));
                         }
-                        context.startActivity(trailerIntent);
+                        if (trailerIntent.resolveActivity(context.getPackageManager()) != null) {
+                            context.startActivity(trailerIntent);
+                        }
                     }
                 });
                 mView.setTag(trailerViewHolder);
