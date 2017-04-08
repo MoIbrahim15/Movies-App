@@ -92,7 +92,7 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
     @Override
     public void onStart() {
         super.onStart();
-        fetchMoviesFromAPI();
+        updateMovies();
     }
 
     @Override
@@ -112,14 +112,6 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
         }
     }
 
-
-    public void fetchMoviesFromAPI() {
-        if (Utility.isOnline(getContext())) {
-            updateMovies();
-        } else {
-            showError(R.string.no_connection);
-        }
-    }
 
     private void onFinishMovies(ArrayList<Movie> movies) {
         progressBar.setVisibility(View.GONE);
@@ -155,15 +147,23 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
         if (sortedBy.equalsIgnoreCase(getString(R.string.pref_sort_favorite))) {
             onFinishMovies(DBUtils.getAllMovies(getContext()));
         } else {
-            Bundle queryBundle = new Bundle();
-            queryBundle.putString(URL_EXTRA, String.valueOf(NetworkUtils.buildUrl(sortedBy)));
-            LoaderManager loaderManager = getActivity().getSupportLoaderManager();
-            Loader<String> moviesLoader = loaderManager.getLoader(LOADER_ID);
-            if (moviesLoader == null) {
-                loaderManager.initLoader(LOADER_ID, queryBundle, this);
+            if (Utility.isOnline(getContext())) {
+                fetchMoviesFromAPI(sortedBy);
             } else {
-                loaderManager.restartLoader(LOADER_ID, queryBundle, this);
+                showError(R.string.no_connection);
             }
+        }
+    }
+
+    private void fetchMoviesFromAPI(String sortedBy) {
+        Bundle queryBundle = new Bundle();
+        queryBundle.putString(URL_EXTRA, String.valueOf(NetworkUtils.buildUrl(sortedBy)));
+        LoaderManager loaderManager = getActivity().getSupportLoaderManager();
+        Loader<String> moviesLoader = loaderManager.getLoader(LOADER_ID);
+        if (moviesLoader == null) {
+            loaderManager.initLoader(LOADER_ID, queryBundle, this);
+        } else {
+            loaderManager.restartLoader(LOADER_ID, queryBundle, this);
         }
     }
 
@@ -212,7 +212,7 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     @Override
     public void onRefresh() {
-        fetchMoviesFromAPI();
+        updateMovies();
     }
 
     private void showError(int errorResID) {
