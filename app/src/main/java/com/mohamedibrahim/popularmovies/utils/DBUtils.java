@@ -17,11 +17,11 @@ import java.util.ArrayList;
 public class DBUtils {
 
 
-    public static ArrayList<Movie> getAllMovies(Context context) {
+    public static ArrayList<Movie> getFavoriteMovies(Context context) {
 
-        ArrayList<Movie> MovieDetailList = new ArrayList<>();
+        ArrayList<Movie> items = new ArrayList<>();
 
-        Cursor cursor = context.getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
+        Cursor cursor = context.getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI_FAVORITE,
                 null,
                 null,
                 null,
@@ -43,15 +43,15 @@ public class DBUtils {
                 movie.setVideo(cursor.getInt(11) == 1);
                 movie.setVoteCount(cursor.getInt(12));
                 movie.setTitle(cursor.getString(13));
-                MovieDetailList.add(movie);
+                items.add(movie);
             } while (cursor.moveToNext());
         }
         if (cursor != null)
             cursor.close();
-        return MovieDetailList;
+        return items;
     }
 
-    public static void addMovie(Movie movie, Context context) {
+    public static void addFavoriteMovie(Movie movie, Context context) {
 
         ContentValues values = new ContentValues();
         values.put(MovieEntry.KEY_MOVIE_ID, movie.getId());
@@ -68,20 +68,20 @@ public class DBUtils {
         values.put(MovieEntry.KEY_VOTE_COUNT, movie.getVoteCount());
         values.put(MovieEntry.KEY_TITLE, movie.getTitle());
 
-        context.getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI,
+        context.getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI_FAVORITE,
                 values);
     }
 
 
     // Deleting single movie
-    public static void deleteMovie(int id, Context context) {
-        context.getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI,
+    public static void deleteFavoriteMovie(int id, Context context) {
+        context.getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI_FAVORITE,
                 MovieEntry.KEY_MOVIE_ID + "=?", new String[]{String.valueOf(id)});
     }
 
-    public static boolean ifMovieFavorite(int id, Context context) {
+    public static boolean isMovieFavorite(int id, Context context) {
 
-        Cursor cursor = context.getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
+        Cursor cursor = context.getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI_FAVORITE,
                 null,
                 MovieEntry.KEY_MOVIE_ID + "=?",
                 new String[]{String.valueOf(id)},

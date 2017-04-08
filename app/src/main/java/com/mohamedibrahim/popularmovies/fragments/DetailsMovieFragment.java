@@ -141,7 +141,7 @@ public class DetailsMovieFragment extends Fragment /*implements*/ /*TrailerRevie
             holder.descView.setText(selectedMovie.getOverview());
 
 
-            if (DBUtils.ifMovieFavorite(selectedMovie.getId(), getContext())) {
+            if (DBUtils.isMovieFavorite(selectedMovie.getId(), getContext())) {
                 holder.favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite);
             } else {
                 holder.favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite_outline);
@@ -150,11 +150,11 @@ public class DetailsMovieFragment extends Fragment /*implements*/ /*TrailerRevie
             holder.favoriteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (DBUtils.ifMovieFavorite(selectedMovie.getId(), getContext())) {
-                        DBUtils.deleteMovie(selectedMovie.getId(), getContext());
+                    if (DBUtils.isMovieFavorite(selectedMovie.getId(), getContext())) {
+                        DBUtils.deleteFavoriteMovie(selectedMovie.getId(), getContext());
                         holder.favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite_outline);
                     } else {
-                        DBUtils.addMovie(selectedMovie, getContext());
+                        DBUtils.addFavoriteMovie(selectedMovie, getContext());
                         holder.favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite);
                     }
                 }

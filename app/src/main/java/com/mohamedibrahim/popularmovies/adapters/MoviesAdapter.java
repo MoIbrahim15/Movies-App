@@ -65,7 +65,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
                 .error(R.drawable.ic_error)
                 .into(holder.posterMovie);
 
-        if (DBUtils.ifMovieFavorite(movie.getId(), context)) {
+        if (DBUtils.isMovieFavorite(movie.getId(), context)) {
             holder.favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite);
         } else {
             holder.favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite_outline);
@@ -74,11 +74,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         holder.favoriteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (DBUtils.ifMovieFavorite(movie.getId(), context)) {
-                    DBUtils.deleteMovie(movie.getId(), context);
+                if (DBUtils.isMovieFavorite(movie.getId(), context)) {
+                    DBUtils.deleteFavoriteMovie(movie.getId(), context);
                     holder.favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite_outline);
                 } else {
-                    DBUtils.addMovie(movie, context);
+                    DBUtils.addFavoriteMovie(movie, context);
                     holder.favoriteBtn.setBackgroundResource(R.drawable.ic_action_favorite);
                 }
             }

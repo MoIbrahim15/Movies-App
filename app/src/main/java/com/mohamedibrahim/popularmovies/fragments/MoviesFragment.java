@@ -85,7 +85,6 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
         initRecyclerView();
         toolbar.inflateMenu(R.menu.main);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-//        ((AppCompatActivity)getActivity()).getSupportActionBar().i
         return mView;
     }
 
@@ -145,7 +144,7 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
         progressBar.setVisibility(View.VISIBLE);
         String sortedBy = Utility.getPreferredMovies(getContext());
         if (sortedBy.equalsIgnoreCase(getString(R.string.pref_sort_favorite))) {
-            onFinishMovies(DBUtils.getAllMovies(getContext()));
+            onFinishMovies(DBUtils.getFavoriteMovies(getContext()));
         } else {
             if (Utility.isOnline(getContext())) {
                 fetchMoviesFromAPI(sortedBy);
