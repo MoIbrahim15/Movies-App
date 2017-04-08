@@ -126,6 +126,7 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     openFirstMovie(movies);
                 }
             }
+            DBUtils.updateCachedMovies(movies, getContext());
         } else {
             showError(R.string.no_movies);
         }
@@ -149,7 +150,7 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
             if (Utility.isOnline(getContext())) {
                 fetchMoviesFromAPI(sortedBy);
             } else {
-                showError(R.string.no_connection);
+                onFinishMovies(DBUtils.getCachedMovies(getContext()));
             }
         }
     }
@@ -278,7 +279,7 @@ public class MoviesFragment extends Fragment implements SwipeRefreshLayout.OnRef
     @Override
     public void onLoadFinished(Loader<String> loader, String data) {
         if (null == data) {
-            showError(R.string.no_connection);
+            onFinishMovies(DBUtils.getCachedMovies(getContext()));
         } else {
             onFinishMovies(JsonUtils.getMoviesDataFromJson(data));
         }

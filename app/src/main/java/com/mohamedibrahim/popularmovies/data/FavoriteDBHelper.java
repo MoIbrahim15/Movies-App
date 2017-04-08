@@ -14,8 +14,8 @@ import com.mohamedibrahim.popularmovies.data.MovieContract.MovieEntry;
 public class FavoriteDBHelper extends SQLiteOpenHelper {
 
     private static FavoriteDBHelper sInstance;
-    private static final int DATABASE_VERSION = 2;
-    private static final String DATABASE_NAME = "moviesManager";
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "favMoviesManager";
 
     public static synchronized FavoriteDBHelper getInstance(Context context) {
 
@@ -58,7 +58,7 @@ public class FavoriteDBHelper extends SQLiteOpenHelper {
 //        db.execSQL("DROP TABLE IF EXISTS " + MovieEntry.TABLE_FAV_MOVIES);
 //        onCreate(db);
         //        TODO when updatind DB must make ulter query for updating table instead of drop table and recreeate it again:)
-        if (oldVersion < 3) {
+        if (oldVersion < 1) {
 //            db.execSQL(DATABASE_ALTER_TEAM_1);
         }
     }
