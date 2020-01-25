@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 
 public class MoviesDBHelper extends SQLiteOpenHelper {
+
     private static MoviesDBHelper sInstance;
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "moviesManager";
@@ -24,6 +25,7 @@ public class MoviesDBHelper extends SQLiteOpenHelper {
         }
         return sInstance;
     }
+
 
     /**
      * Constructor should be private to prevent direct instantiation.
